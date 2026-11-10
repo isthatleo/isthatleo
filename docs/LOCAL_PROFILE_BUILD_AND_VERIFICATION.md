@@ -161,6 +161,7 @@ Current test file: `tests/test_render_readme_cards.py`.
 | `test_profile_configuration_rejects_invalid_tile_colours` | SVG input safety | Tile accents must be six-digit hex colours |
 | `test_empty_contributions_are_not_rendered_as_zero_metrics` | Empty-data honesty | Empty contribution data displays the waiting state, not invented metrics |
 | `test_readme_image_references_exist` | README asset integrity | Every local `cards/` image source referenced by README exists |
+| `test_readme_project_destinations_match_profile_configuration` | Link integrity | Each project card's README destination matches its configured URL |
 | `test_calendar_parser_extracts_valid_cells_and_skips_malformed_values` | Fetcher parsing | Valid dates/counts/levels are normalized; malformed, negative and out-of-range cells are ignored |
 | `test_calendar_parser_rejects_duplicate_dates` | Fetcher integrity | Duplicate dates fail closed |
 | `test_empty_fetch_cannot_overwrite_existing_contributions` | Data safety | Empty results cannot replace an existing dataset |
