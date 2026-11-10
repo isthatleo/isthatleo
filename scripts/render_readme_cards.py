@@ -153,6 +153,11 @@ def render_contributions(data: dict) -> str:
     stats = derive_stats(data)
     s = svg_start(960, 210, 1.0)
     s += label(34, 35, "ACTIVITY / LAST 12 MONTHS", 11, PALETTE["signal"])
+    if not stats["days"]:
+        s += '<rect x="30" y="58" width="900" height="112" rx="12" fill="#111820" stroke="#26323c"/>'
+        s += label(54, 101, "WAITING FOR VERIFIED GITHUB ACTIVITY", 12, PALETTE["white"])
+        s += '<text x="54" y="130" font-size="13" fill="#9aa8b5">Live contribution metrics will appear after the data refresh succeeds. No numbers are fabricated.</text>'
+        return s + svg_end()
     metrics = [("CURRENT STREAK", f'{stats["current_streak"]} days'),
                ("ACTIVE DAYS", str(stats["active_days"])),
                ("BUSIEST DAY", f'{stats["busiest_date"]} · {stats["busiest_count"]}')]
@@ -206,6 +211,24 @@ def render_repo(repo: dict, delay: float) -> str:
     s += '<circle cx="891" cy="91" r="34" fill="#2bb0cf" opacity=".07"/><path d="M875 91h31m-9-9 9 9-9 9" stroke="#55c6dc" fill="none" stroke-width="1.7"/>'
     return s + svg_end()
 
+def render_stack(groups: list[dict]) -> str:
+    """Render a compact, grouped capability map without badge-wall noise."""
+    s = svg_start(960, 300, 2.0)
+    s += label(30, 34, "ENGINEERING TOOLKIT  /  SELECTED PRACTICE", 10, PALETTE["signal"])
+    columns = 3
+    col_w, top = 292, 66
+    for index, group in enumerate(groups[:columns]):
+        x = 30 + index * 316
+        s += f'<rect x="{x}" y="{top}" width="{col_w}" height="198" rx="14" fill="#0b1016" stroke="#26323c"/>'
+        s += label(x+18, top+32, f'{index+1:02d}  /  {group["title"]}', 10, PALETTE["signal"])
+        s += f'<path d="M{x+18} {top+48}H{x+col_w-18}" stroke="#26323c"/>'
+        for row, item in enumerate(group.get("items", [])[:6]):
+            y = top + 78 + row*23
+            s += f'<circle cx="{x+22}" cy="{y-4}" r="3" fill="#45bad2"/>'
+            s += f'<text x="{x+34}" y="{y}" font-size="13" fill="{PALETTE["text"]}">{esc(item)}</text>'
+    return s + svg_end()
+
+
 def render_graph(data: dict) -> str:
     days = derive_stats(data)["days"]
     s = svg_start(960, 176, 6.0)
@@ -239,6 +262,7 @@ def main() -> None:
     (CARDS / "hero.svg").write_text(render_hero(profile), encoding="utf-8")
     (CARDS / "contributions.svg").write_text(render_contributions(contributions), encoding="utf-8")
     (CARDS / "contribution-graph.svg").write_text(render_graph(contributions), encoding="utf-8")
+    (CARDS / "stack.svg").write_text(render_stack(profile.get("stack_groups", [])), encoding="utf-8")
     for i, tile in enumerate(profile["tiles"]):
         target = CARDS / "links" / f'{tile["id"]}.svg'
         target.parent.mkdir(parents=True, exist_ok=True)
