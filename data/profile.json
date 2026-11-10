@@ -66,5 +66,21 @@
         "Git / CI"
       ]
     }
+  ],
+  "tiles": [
+    {
+      "id": "build",
+      "title": "BUILD",
+      "subtitle": "Software · Products · Engineering",
+      "href": "https://leonardlomude.vercel.app",
+      "accent": "#2bb0cf"
+    },
+    {
+      "id": "systems",
+      "title": "SYSTEMS",
+      "subtitle": "Architecture · AI · Infrastructure",
+      "href": "https://github.com/isthatleo",
+      "accent": "#5b7cdf"
+    }
   ]
 }
