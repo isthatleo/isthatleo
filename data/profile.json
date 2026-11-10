@@ -2,7 +2,7 @@
   "name": "Leonard Lomude",
   "handle": "@notlxnrd",
   "role": "Software Engineer & Product Builder",
-  "tagline": "Building software, AI systems and digital products — from architecture to implementation.",
+  "tagline": "I design and engineer software, AI systems and digital products — from architecture to the final interface.",
   "location": "Kampala, Uganda · Working globally",
   "website": "https://leonardlomude.vercel.app",
   "tiles": [
@@ -32,29 +32,29 @@
     {
       "id": "nancy",
       "name": "NÅNCY / BILLION",
-      "description": "A private-first AI assistant platform with orchestration, tools, memory and multi-surface interfaces.",
-      "status": "Active development",
+      "description": "A private-first AI assistant platform for orchestration, tools, memory and multimodal workflows.",
+      "status": "AI SYSTEMS · ACTIVE DEVELOPMENT",
       "url": "https://github.com/isthatleo/automatic-octo-spork"
     },
     {
       "id": "notlxnrd-os",
       "name": "NOTLXNRD.OS",
-      "description": "A personal digital business operating system — portfolio, command center and client workspace.",
-      "status": "Active development",
+      "description": "A personal digital business operating system connecting portfolio, command center and client workflows.",
+      "status": "PRODUCT ENGINEERING · ACTIVE DEVELOPMENT",
       "url": "https://github.com/isthatleo/notlxnrd"
     },
     {
       "id": "roxan",
       "name": "ROXAN",
-      "description": "Education operations software focused on connected school workflows and institutional systems.",
-      "status": "Product development",
+      "description": "Education operations software for connected school administration, institutional workflows and reporting.",
+      "status": "EDUCATION TECHNOLOGY · PRODUCT DEVELOPMENT",
       "url": "https://leonardlomude.vercel.app"
     },
     {
       "id": "trade-titans",
       "name": "TRADE TITANS",
-      "description": "Trading education and operations tooling, built around structured workflows and analytics.",
-      "status": "Selected project",
+      "description": "Trading education and operations tooling built around structured workflows, analytics and execution discipline.",
+      "status": "TRADING TECHNOLOGY · SELECTED WORK",
       "url": "https://leonardlomude.vercel.app"
     }
   ]
