@@ -170,6 +170,7 @@ Current test file: `tests/test_render_readme_cards.py`.
 | `test_fetch_write_is_valid_json_and_atomic_output_shape` | Output contract | Successful writes contain schema metadata and normalized days with no leftover temp files |
 | `test_every_generated_asset_is_well_formed_and_matches_manifest` | Full renderer integration | All 10 expected SVGs are generated and parse as XML |
 | `test_static_and_animated_svg_modes` | Motion modes | Static output omits keyframes; animated output includes reduced-motion handling |
+| `test_editorial_hero_uses_the_new_visual_identity` | Hero design regression | Hero SVG is well-formed and contains the graphite / acid-lime editorial tokens without the previous cyan palette |
 
 ### Additional manual / release gates
 
@@ -198,7 +199,7 @@ The automated suite covers configuration validation, contribution parsing fixtur
 
 Do not make unit tests depend on live GitHub. Keep live network checks as a separate manual/integration gate.
 
-## 6. Profile content and asset editing rules
+## 7. Profile content and asset editing rules
 
 ### Identity and narrative
 - Edit identity fields in `data/profile.json`.
@@ -222,7 +223,7 @@ Do not make unit tests depend on live GitHub. Keep live network checks as a sepa
 - A missing or empty dataset must remain visibly empty / awaiting refresh.
 - Check `fetched_at` and `source` when reviewing the contribution data.
 
-## 7. Git workflow for local work
+## 8. Git workflow for local work
 
 Start by checking the branch and working tree:
 
@@ -252,7 +253,7 @@ Review the diff before committing. Suggested commit scopes:
 
 Push to a feature branch and review the GitHub-rendered profile before merging to `main`, unless the owner deliberately chooses a direct-main workflow.
 
-## 8. GitHub Actions troubleshooting
+## 9. GitHub Actions troubleshooting
 
 Workflow: `.github/workflows/update-profile-art.yml`.
 
@@ -289,7 +290,7 @@ On the PC:
 
 The workflow currently uses major-version action tags (`actions/checkout@v4`, `actions/setup-python@v5`, `stefanzweifel/git-auto-commit-action@v5`). Consider pinning third-party actions to verified full commit SHAs as a separate supply-chain hardening task.
 
-## 9. Definition of done
+## 10. Definition of done
 
 The profile refresh is complete only when all are true:
 
