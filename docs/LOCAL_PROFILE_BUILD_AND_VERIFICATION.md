@@ -275,12 +275,12 @@ The workflow is split into two jobs:
 
 This separation means a contribution-source/network failure cannot hide the independent unit-test result. A failed verification job blocks publishing refreshed assets.
 
-Recent workflow attempts were failing almost immediately, with no exposed step list or useful job logs through the available GitHub API inspection. **The cause is not yet established.** Do not assume it is a Python/test failure or a runner-provisioning issue without checking the actual Actions run page.
+Recent workflow attempts were failing almost immediately, with no exposed step list or useful job logs through the previously available GitHub API inspection. **Cause established 2026-11-10: the account is locked due to a billing issue.** GitHub reports the `verify` job as failed before any step starts, with the annotation: "The job was not started because your account is locked due to a billing issue." This is an account/billing problem, not a Python, test or runner-provisioning failure. Resolve the lock under Settings → Billing & plans, then re-run the workflow.
 
 On the PC:
 - Open the failed run from the repository's Actions tab.
 - Expand the `render` job and identify the exact failing step.
-- If no step starts, inspect repository/org Actions permissions, runner availability and workflow policy.
+- If no step starts, inspect repository/org Actions permissions, billing status, runner availability and workflow policy.
 - If dependency installation fails, compare Python version and requirements.
 - If `verify` fails, inspect the pytest or whitespace-check step; the refresh job should be skipped.
 - If `refresh` fails at fetch, inspect the HTTP response / page markup and confirm no data was overwritten. The verification job should still have its own result.
