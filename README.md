@@ -5,46 +5,54 @@
   <p>
     <a href="https://leonardlomude.vercel.app">PORTFOLIO</a>
     &nbsp;·&nbsp;
-    <a href="https://github.com/isthatleo?tab=repositories">REPOSITORIES</a>
+    <a href="https://github.com/isthatleo?tab=repositories">EXPLORE MY CODE</a>
     &nbsp;·&nbsp;
-    <a href="https://linkedin.com/in/notlxnrd">LINKEDIN</a>
+    <a href="https://github.com/isthatleo/automatic-octo-spork">CURRENT BUILD</a>
   </p>
 </div>
 
 ---
 
-## The work
+## Engineer by craft. Builder by instinct.
 
-I’m Leonard — a software engineer and product builder based in Kampala, Uganda. I work across product thinking, interface design and systems engineering, turning ambitious ideas into software that can actually ship.
+I’m Leonard Lomude — a software engineer and product builder based in Kampala, Uganda, working globally.
 
-My interests sit at the intersection of **AI, developer tooling, business systems and intelligent automation**. I care about the whole build: the architecture underneath, the experience on top, and the details that make a product dependable.
+I work across product thinking, interface design and systems engineering. My focus is building useful software end to end: understanding the problem, shaping the architecture, designing the experience and shipping something dependable.
 
-## Current focus
+I’m especially interested in the space where **AI, software products, business infrastructure and intelligent automation** meet.
+
+## What I’m building toward
 
 <table>
   <tr>
     <td width="50%" valign="top">
-      <strong>01 / AI & intelligent systems</strong><br />
+      **01 / AI & intelligent systems**
+
       Agent orchestration, tool use, memory, multimodal interfaces and private-first assistants.
     </td>
     <td width="50%" valign="top">
-      <strong>02 / Product engineering</strong><br />
-      Full-stack applications, polished interfaces, APIs, data models and production workflows.
+      **02 / Product engineering**
+
+      Full-stack applications, thoughtful interfaces, APIs, data models and production workflows.
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
-      <strong>03 / Business infrastructure</strong><br />
+      **03 / Business infrastructure**
+
       ERP platforms, education operations, automation and connected business workflows.
     </td>
     <td width="50%" valign="top">
-      <strong>04 / Trading technology</strong><br />
+      **04 / Trading technology**
+
       Market tooling, trading journals, risk workflows and analytics for disciplined execution.
     </td>
   </tr>
 </table>
 
 ## Selected work
+
+<p><sub>A few products and systems that represent the problems I like working on.</sub></p>
 
 <div align="center">
   <a href="https://github.com/isthatleo/automatic-octo-spork"><img src="./cards/repos/nancy.svg" width="100%" alt="NÅNCY / BILLION — private-first AI assistant platform" /></a>
@@ -56,32 +64,33 @@ My interests sit at the intersection of **AI, developer tooling, business system
   <a href="https://leonardlomude.vercel.app"><img src="./cards/repos/trade-titans.svg" width="100%" alt="TRADE TITANS — trading education and operations tooling" /></a>
 </div>
 
-## Tools I work with
+## Engineering toolkit
 
-<p align="center">
-  <img src="https://img.shields.io/badge/TypeScript-07090c?style=flat-square&logo=typescript&logoColor=2bb0cf" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/JavaScript-07090c?style=flat-square&logo=javascript&logoColor=2bb0cf" alt="JavaScript" />
-  <img src="https://img.shields.io/badge/React-07090c?style=flat-square&logo=react&logoColor=2bb0cf" alt="React" />
-  <img src="https://img.shields.io/badge/Next.js-07090c?style=flat-square&logo=nextdotjs&logoColor=2bb0cf" alt="Next.js" />
-  <img src="https://img.shields.io/badge/Rust-07090c?style=flat-square&logo=rust&logoColor=2bb0cf" alt="Rust" />
-  <img src="https://img.shields.io/badge/Python-07090c?style=flat-square&logo=python&logoColor=2bb0cf" alt="Python" />
-  <img src="https://img.shields.io/badge/FastAPI-07090c?style=flat-square&logo=fastapi&logoColor=2bb0cf" alt="FastAPI" />
-  <img src="https://img.shields.io/badge/PostgreSQL-07090c?style=flat-square&logo=postgresql&logoColor=2bb0cf" alt="PostgreSQL" />
-  <img src="https://img.shields.io/badge/Docker-07090c?style=flat-square&logo=docker&logoColor=2bb0cf" alt="Docker" />
-  <img src="https://img.shields.io/badge/Git-07090c?style=flat-square&logo=git&logoColor=2bb0cf" alt="Git" />
-</p>
-
-## Open source activity
+I choose tools around the problem, not the other way around.
 
 <div align="center">
-  <img src="./cards/contributions.svg" width="100%" alt="GitHub contribution activity summary" />
+  <img src="./cards/stack.svg" width="100%" alt="Selected engineering technologies and practices, grouped by discipline" />
+</div>
+
+## How I approach the work
+
+- **Architecture before accumulation.** Keep the system understandable as it grows.
+- **Experience is part of the engineering.** A powerful backend still needs a clear interface.
+- **Evidence over theatre.** Test the thing, measure what matters and be honest about what is unfinished.
+
+## Open-source activity
+
+<div align="center">
+  <img src="./cards/contributions.svg" width="100%" alt="GitHub contribution activity summary, populated from verified GitHub data" />
   <br /><br />
-  <img src="./cards/contribution-graph.svg" width="100%" alt="GitHub contribution graph" />
+  <img src="./cards/contribution-graph.svg" width="100%" alt="GitHub contribution calendar generated from verified GitHub data" />
 </div>
 
 ---
 
 <div align="center">
-  <sub><strong>NOTLXNRD</strong> · Software, systems and products built with intent.</sub><br />
-  <sub><a href="https://leonardlomude.vercel.app">leonardlomude.vercel.app</a> · Kampala, Uganda · Working globally</sub>
+  <strong>Have a good problem to solve?</strong><br />
+  <a href="https://leonardlomude.vercel.app">Explore my work and get in touch →</a><br /><br />
+  <sub>NOTLXNRD · Software, systems and products built with intent.</sub><br />
+  <sub>Kampala, Uganda · Working globally</sub>
 </div>
