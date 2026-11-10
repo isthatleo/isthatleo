@@ -152,6 +152,7 @@ Current test file: `tests/test_render_readme_cards.py`.
 | `test_xml_escaping` | Untrusted text in SVG | Ampersands and angle brackets are escaped |
 | `test_svg_is_well_formed` | Hero rendering | Hero output parses as XML with special-character input |
 | `test_stack_card_is_well_formed` | Toolkit rendering | Toolkit output parses and contains the supplied group items |
+| `test_project_description_truncation_is_visible_and_escaped` | Project-card readability | Long descriptions are safely escaped and visibly truncated with an ellipsis |
 | `test_empty_contributions_are_not_rendered_as_zero_metrics` | Empty-data honesty | Empty contribution data displays the waiting state, not invented metrics |
 | `test_readme_image_references_exist` | README asset integrity | Every local `cards/` image source referenced by README exists |
 | `test_calendar_parser_extracts_valid_cells_and_skips_malformed_values` | Fetcher parsing | Valid dates/counts/levels are normalized; malformed, negative and out-of-range cells are ignored |
