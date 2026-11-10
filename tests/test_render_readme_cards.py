@@ -48,6 +48,14 @@ def test_svg_is_well_formed():
     assert "Build &lt;ship&gt;" in svg
 
 
+def test_readme_project_destinations_match_profile_configuration():
+    profile = json.loads((ROOT / "data" / "profile.json").read_text(encoding="utf-8"))
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    for project in profile["featured_repos"]:
+        expected = f'<a href="{project["url"]}"><img src="./cards/repos/{project["id"]}.svg"'
+        assert expected in readme, f"README destination mismatch for {project['id']}"
+
+
 def test_profile_configuration_accepts_repository_source_data():
     profile = json.loads((ROOT / "data" / "profile.json").read_text(encoding="utf-8"))
     renderer.validate_profile(profile)
@@ -161,7 +169,7 @@ def test_empty_fetch_cannot_overwrite_existing_contributions(tmp_path):
 
 def test_network_failure_does_not_touch_existing_dataset(tmp_path, monkeypatch):
     target = tmp_path / "contributions.json"
-    original = '{"trusted":"existing-data"}\\n'
+    original = '{"trusted":"existing-data"}\n'
     target.write_text(original, encoding="utf-8")
     monkeypatch.setattr(fetcher, "TARGET", target)
 
