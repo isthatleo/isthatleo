@@ -1,0 +1,37 @@
+name: Refresh animated profile cards
+
+on:
+  schedule:
+    - cron: "23 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: profile-card-refresh
+  cancel-in-progress: false
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install -r scripts/requirements.txt
+      - name: Fetch contribution data
+        run: python scripts/fetch_contributions.py
+      - name: Render animated SVG cards
+        run: python scripts/render_readme_cards.py
+      - name: Run renderer tests
+        run: python -m pytest -q
+      - name: Commit generated profile art
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(profile): refresh contribution cards [skip ci]"
+          file_pattern: "data/contributions.json cards/*.svg cards/**/*.svg"
