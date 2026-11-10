@@ -14,6 +14,7 @@ from collections import defaultdict
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
@@ -39,6 +40,69 @@ def load_json(path: Path, default: Any) -> Any:
     if not path.exists():
         return default
     return json.loads(path.read_text(encoding="utf-8"))
+
+def validate_profile(profile: dict) -> None:
+    """Validate profile configuration before writing any generated assets."""
+    required_text = ("name", "role", "tagline", "location", "website")
+    for field in required_text:
+        if not isinstance(profile.get(field), str) or not profile[field].strip():
+            raise ValueError(f"profile.{field} must be a non-empty string")
+
+    def validate_url(value: Any, field: str) -> None:
+        parsed = urlparse(value) if isinstance(value, str) else None
+        if not parsed or parsed.scheme not in {"http", "https"} or not parsed.netloc:
+            raise ValueError(f"{field} must be an absolute HTTP(S) URL")
+
+    validate_url(profile["website"], "profile.website")
+
+    repos = profile.get("featured_repos")
+    if not isinstance(repos, list) or not repos:
+        raise ValueError("profile.featured_repos must be a non-empty list")
+    repo_ids = set()
+    for index, repo in enumerate(repos):
+        prefix = f"profile.featured_repos[{index}]"
+        if not isinstance(repo, dict):
+            raise ValueError(f"{prefix} must be an object")
+        for field in ("id", "name", "description", "url"):
+            if not isinstance(repo.get(field), str) or not repo[field].strip():
+                raise ValueError(f"{prefix}.{field} must be a non-empty string")
+        if not re.fullmatch(r"[a-z0-9][a-z0-9-]*", repo["id"]):
+            raise ValueError(f"{prefix}.id contains unsafe path characters")
+        if repo["id"] in repo_ids:
+            raise ValueError(f"Duplicate featured project id: {repo['id']}")
+        repo_ids.add(repo["id"])
+        validate_url(repo["url"], f"{prefix}.url")
+
+    tiles = profile.get("tiles")
+    if not isinstance(tiles, list) or not tiles:
+        raise ValueError("profile.tiles must be a non-empty list")
+    tile_ids = set()
+    for index, tile in enumerate(tiles):
+        prefix = f"profile.tiles[{index}]"
+        if not isinstance(tile, dict):
+            raise ValueError(f"{prefix} must be an object")
+        for field in ("id", "title", "subtitle", "href", "accent"):
+            if not isinstance(tile.get(field), str) or not tile[field].strip():
+                raise ValueError(f"{prefix}.{field} must be a non-empty string")
+        if not re.fullmatch(r"[a-z0-9][a-z0-9-]*", tile["id"]):
+            raise ValueError(f"{prefix}.id contains unsafe path characters")
+        if tile["id"] in tile_ids:
+            raise ValueError(f"Duplicate tile id: {tile['id']}")
+        tile_ids.add(tile["id"])
+        validate_url(tile["href"], f"{prefix}.href")
+        if not re.fullmatch(r"#[0-9a-fA-F]{6}", tile["accent"]):
+            raise ValueError(f"{prefix}.accent must be a six-digit hex colour")
+
+    groups = profile.get("stack_groups")
+    if not isinstance(groups, list) or len(groups) > 3:
+        raise ValueError("profile.stack_groups must be a list of at most three groups")
+    for index, group in enumerate(groups):
+        if not isinstance(group, dict) or not isinstance(group.get("title"), str) or not group["title"].strip():
+            raise ValueError(f"profile.stack_groups[{index}].title must be a non-empty string")
+        items = group.get("items")
+        if not isinstance(items, list) or len(items) > 6 or any(not isinstance(item, str) or not item.strip() for item in items):
+            raise ValueError(f"profile.stack_groups[{index}].items must contain at most six non-empty strings")
+
 
 def font_css() -> str:
     """Subset local WOFF/TTF fonts when present; system fallbacks remain deterministic."""
@@ -261,6 +325,7 @@ def main() -> None:
     contributions = load_json(CONTRIB_PATH, {"days": []})
     if not profile:
         raise SystemExit(f"Missing profile configuration: {PROFILE_PATH}")
+    validate_profile(profile)
     CARDS.mkdir(parents=True, exist_ok=True)
     (CARDS / "hero.svg").write_text(render_hero(profile), encoding="utf-8")
     (CARDS / "contributions.svg").write_text(render_contributions(contributions), encoding="utf-8")
