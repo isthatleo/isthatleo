@@ -48,6 +48,43 @@ def test_svg_is_well_formed():
     assert "Build &lt;ship&gt;" in svg
 
 
+def test_profile_configuration_accepts_repository_source_data():
+    profile = json.loads((ROOT / "data" / "profile.json").read_text(encoding="utf-8"))
+    renderer.validate_profile(profile)
+
+
+def test_profile_configuration_rejects_unsafe_project_ids():
+    profile = json.loads((ROOT / "data" / "profile.json").read_text(encoding="utf-8"))
+    profile["featured_repos"][0]["id"] = "../outside"
+    import pytest
+    with pytest.raises(ValueError, match="unsafe path"):
+        renderer.validate_profile(profile)
+
+
+def test_profile_configuration_rejects_duplicate_tile_ids():
+    profile = json.loads((ROOT / "data" / "profile.json").read_text(encoding="utf-8"))
+    profile["tiles"][1]["id"] = profile["tiles"][0]["id"]
+    import pytest
+    with pytest.raises(ValueError, match="Duplicate tile"):
+        renderer.validate_profile(profile)
+
+
+def test_profile_configuration_rejects_non_http_project_urls():
+    profile = json.loads((ROOT / "data" / "profile.json").read_text(encoding="utf-8"))
+    profile["featured_repos"][0]["url"] = "javascript:alert(1)"
+    import pytest
+    with pytest.raises(ValueError, match="HTTP"):
+        renderer.validate_profile(profile)
+
+
+def test_profile_configuration_rejects_invalid_tile_colours():
+    profile = json.loads((ROOT / "data" / "profile.json").read_text(encoding="utf-8"))
+    profile["tiles"][0]["accent"] = "url(javascript:alert(1))"
+    import pytest
+    with pytest.raises(ValueError, match="hex colour"):
+        renderer.validate_profile(profile)
+
+
 def test_project_description_truncation_is_visible_and_escaped():
     svg = renderer.render_repo({
         "id": "sample",
@@ -126,6 +163,7 @@ def test_network_failure_does_not_touch_existing_dataset(tmp_path, monkeypatch):
     target = tmp_path / "contributions.json"
     original = '{"trusted":"existing-data"}\\n'
     target.write_text(original, encoding="utf-8")
+    monkeypatch.setattr(fetcher, "TARGET", target)
 
     def fail_fetch():
         raise OSError("network unavailable")
