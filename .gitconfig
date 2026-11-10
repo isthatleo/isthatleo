@@ -1,0 +1,5 @@
+# Repository Git identity for isthatleo/isthatleo.
+# Wired into .git/config with include.path so commits from this clone use it.
+[user]
+	name = Leonard Lomude
+	email = 163171315+isthatleo@users.noreply.github.com
