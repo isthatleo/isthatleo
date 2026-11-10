@@ -120,6 +120,27 @@ The current direction is **luxury editorial × cyber-industrial**: graphite foun
 
 ## 5. Generated asset manifest
 
+The renderer currently generates **10 SVG files**:
+
+| Asset | Source | Purpose |
+|---|---|---|
+| `cards/hero.svg` | `profile.json` + `render_hero` | Main identity / hero banner |
+| `cards/contributions.svg` | `contributions.json` + `render_contributions` | Contribution summary and monthly activity |
+| `cards/contribution-graph.svg` | `contributions.json` + `render_graph` | Contribution calendar grid |
+| `cards/stack.svg` | `profile.json:stack_groups` + `render_stack` | Grouped engineering toolkit |
+| `cards/links/build.svg` | `profile.json:tiles[build]` | Build / portfolio destination tile |
+| `cards/links/systems.svg` | `profile.json:tiles[systems]` | Systems / GitHub destination tile |
+| `cards/repos/nancy.svg` | `profile.json:featured_repos[nancy]` | NÅNCY / BILLION project panel |
+| `cards/repos/notlxnrd-os.svg` | `profile.json:featured_repos[notlxnrd-os]` | NOTLXNRD.OS project panel |
+| `cards/repos/roxan.svg` | `profile.json:featured_repos[roxan]` | ROXAN project panel |
+| `cards/repos/trade-titans.svg` | `profile.json:featured_repos[trade-titans]` | TRADE TITANS project panel |
+
+The README currently references the hero, toolkit, contribution summary, contribution graph and four project panels. The two link tiles are generated assets but are not currently embedded in the README. Keep that distinction intentional; either embed them in a future layout change or remove them from the generator only after confirming no other consumer uses them.
+
+### Generated versus source-controlled
+
+Commit generated SVGs alongside the source changes that produce them. This keeps the GitHub profile readable without requiring GitHub Actions to run before every README update. Commit refreshed `data/contributions.json` only when it was successfully fetched from the stated source.
+
 ## 6. Automated test inventory
 
 Run the complete suite with:
