@@ -12,7 +12,7 @@ The root `README.md` is the public GitHub profile page. The SVG files under `car
 - `data/profile.json` — identity, project descriptions, destinations, toolkit groups and link tiles.
 - `data/contributions.json` — normalized GitHub contribution-calendar data.
 - `scripts/fetch_contributions.py` — fetches the public contribution calendar for `isthatleo`.
-- `scripts/render_readme_cards.py` — renders SVG assets from the source data.
+- `scripts/render_readme_cards.py` — validates profile configuration, then renders SVG assets from the source data.
 - `README.md` — controls the page narrative, section order, image references and clickable links.
 - `tests/` — automated tests for data calculations, SVG output and repository asset references.
 
@@ -66,6 +66,7 @@ Expected result:
 - Writes `data/contributions.json` with `schema_version`, `username`, `source`, `fetched_at` and `days`.
 - Parses and validates ISO dates, non-negative counts and contribution levels (0–4); malformed cells are skipped.
 - Rejects duplicate dates rather than silently double-counting them.
+- The renderer validates required profile fields, absolute HTTP(S) destinations, unique safe asset IDs, six-digit hex accent colours and toolkit layout limits before writing assets.
 - Exits non-zero if no valid calendar cells are parsed.
 - Writes through a temporary file in the target directory, then atomically replaces the dataset only after a valid non-empty fetch. Network, parse and empty-result failures leave the previous file untouched.
 
@@ -153,6 +154,11 @@ Current test file: `tests/test_render_readme_cards.py`.
 | `test_svg_is_well_formed` | Hero rendering | Hero output parses as XML with special-character input |
 | `test_stack_card_is_well_formed` | Toolkit rendering | Toolkit output parses and contains the supplied group items |
 | `test_project_description_truncation_is_visible_and_escaped` | Project-card readability | Long descriptions are safely escaped and visibly truncated with an ellipsis |
+| `test_profile_configuration_accepts_repository_source_data` | Profile schema | Current profile data passes renderer validation |
+| `test_profile_configuration_rejects_unsafe_project_ids` | Filesystem safety | Project IDs cannot escape the generated asset directory |
+| `test_profile_configuration_rejects_duplicate_tile_ids` | Asset integrity | Duplicate tile IDs are rejected |
+| `test_profile_configuration_rejects_non_http_project_urls` | Link safety | Project destinations must use absolute HTTP(S) URLs |
+| `test_profile_configuration_rejects_invalid_tile_colours` | SVG input safety | Tile accents must be six-digit hex colours |
 | `test_empty_contributions_are_not_rendered_as_zero_metrics` | Empty-data honesty | Empty contribution data displays the waiting state, not invented metrics |
 | `test_readme_image_references_exist` | README asset integrity | Every local `cards/` image source referenced by README exists |
 | `test_calendar_parser_extracts_valid_cells_and_skips_malformed_values` | Fetcher parsing | Valid dates/counts/levels are normalized; malformed, negative and out-of-range cells are ignored |
@@ -179,17 +185,14 @@ These are required even when pytest passes:
 10. Motion is subtle and does not obscure text; reduced-motion/static output remains readable.
 11. `git diff --check` passes and no unrelated files are modified.
 
-### Known coverage gaps to address during local verification
+### Remaining coverage gaps
 
-The automated suite now covers parser fixtures, duplicate dates, empty/network failure safety, atomic output, all generated SVGs, the asset manifest and motion modes. Remaining hardening opportunities include:
-- Contribution fetcher parsing using saved HTML fixtures (no network in unit tests).
-- Fetcher behavior for malformed/empty HTML and network failures, proving existing data remains untouched.
-- Invalid or missing profile keys and malformed contribution records.
-- XML parsing for every generated SVG, not just selected renderer outputs.
-- An exact expected asset manifest, including both link tiles and all four project cards.
-- README link destinations and image references, not only image-file existence.
-- Static-mode output and the presence of reduced-motion handling in animated output.
-- Escaping for all user-controlled text fields, including project descriptions and toolkit labels.
+The automated suite covers configuration validation, contribution parsing fixtures, duplicate dates, empty/network failure safety, atomic output, all generated SVGs, the asset manifest and motion modes. Remaining work is primarily integration/release coverage:
+
+- Validate README project and tile link destinations against the source configuration.
+- Add explicit tests for malformed JSON and missing required profile keys.
+- Keep live contribution fetching as a manual/integration gate; unit tests must remain network-independent.
+- Inspect SVGs at their actual GitHub-rendered dimensions on desktop and mobile.
 
 Do not make unit tests depend on live GitHub. Keep live network checks as a separate manual/integration gate.
 
