@@ -1,0 +1,61 @@
+{
+  "name": "Leonard Lomude",
+  "handle": "@notlxnrd",
+  "role": "Software Engineer & Product Builder",
+  "tagline": "Building software, AI systems and digital products — from architecture to implementation.",
+  "location": "Kampala, Uganda · Working globally",
+  "website": "https://leonardlomude.vercel.app",
+  "tiles": [
+    {
+      "id": "build",
+      "title": "BUILD",
+      "subtitle": "Software · Products · Engineering",
+      "href": "https://leonardlomude.vercel.app",
+      "accent": "#2bb0cf"
+    },
+    {
+      "id": "systems",
+      "title": "SYSTEMS",
+      "subtitle": "Architecture · AI · Infrastructure",
+      "href": "https://github.com/isthatleo",
+      "accent": "#5b7cdf"
+    },
+    {
+      "id": "connect",
+      "title": "CONNECT",
+      "subtitle": "Ideas, collaboration and selected work",
+      "href": "https://linkedin.com/in/notlxnrd",
+      "accent": "#2f9d74"
+    }
+  ],
+  "featured_repos": [
+    {
+      "id": "nancy",
+      "name": "NÅNCY / BILLION",
+      "description": "A private-first AI assistant platform with orchestration, tools, memory and multi-surface interfaces.",
+      "status": "Active development",
+      "url": "https://github.com/isthatleo/automatic-octo-spork"
+    },
+    {
+      "id": "notlxnrd-os",
+      "name": "NOTLXNRD.OS",
+      "description": "A personal digital business operating system — portfolio, command center and client workspace.",
+      "status": "Active development",
+      "url": "https://github.com/isthatleo/notlxnrd"
+    },
+    {
+      "id": "roxan",
+      "name": "ROXAN",
+      "description": "Education operations software focused on connected school workflows and institutional systems.",
+      "status": "Product development",
+      "url": "https://leonardlomude.vercel.app"
+    },
+    {
+      "id": "trade-titans",
+      "name": "TRADE TITANS",
+      "description": "Trading education and operations tooling, built around structured workflows and analytics.",
+      "status": "Selected project",
+      "url": "https://leonardlomude.vercel.app"
+    }
+  ]
+}
