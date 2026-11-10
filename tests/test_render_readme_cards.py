@@ -245,3 +245,18 @@ def test_static_and_animated_svg_modes(monkeypatch):
     animated_svg = renderer.svg_start(100, 100)
     assert "@keyframes" in animated_svg
     assert "prefers-reduced-motion:reduce" in animated_svg
+
+
+def test_editorial_hero_uses_the_new_visual_identity():
+    profile = {
+        "name": "NOTLXNRD",
+        "role": "Software engineer. Systems thinker.",
+        "tagline": "I turn complex ideas into useful, engineered products.",
+        "location": "Kampala, Uganda",
+    }
+    svg = renderer.render_hero(profile)
+    ET.fromstring(svg)
+    assert "editorial-bg" in svg
+    assert "editorial-acid" in svg
+    assert "INDEPENDENT ENGINEERING" in svg
+    assert "2bb0cf" not in svg
