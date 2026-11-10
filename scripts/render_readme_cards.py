@@ -320,6 +320,12 @@ def render_graph(data: dict) -> str:
     s += label(30, 166, f'{derive_stats(data)["total"]:,} contributions · {len(days)} days tracked', 9)
     return s + svg_end()
 
+def write_card(path: Path, content: str) -> None:
+    """Write deterministic UTF-8/LF output without trailing whitespace."""
+    normalized = "\n".join(line.rstrip() for line in content.splitlines()) + "\n"
+    path.write_text(normalized, encoding="utf-8", newline="\n")
+
+
 def main() -> None:
     profile = load_json(PROFILE_PATH, {})
     contributions = load_json(CONTRIB_PATH, {"days": []})
@@ -327,18 +333,18 @@ def main() -> None:
         raise SystemExit(f"Missing profile configuration: {PROFILE_PATH}")
     validate_profile(profile)
     CARDS.mkdir(parents=True, exist_ok=True)
-    (CARDS / "hero.svg").write_text(render_hero(profile), encoding="utf-8")
-    (CARDS / "contributions.svg").write_text(render_contributions(contributions), encoding="utf-8")
-    (CARDS / "contribution-graph.svg").write_text(render_graph(contributions), encoding="utf-8")
-    (CARDS / "stack.svg").write_text(render_stack(profile.get("stack_groups", [])), encoding="utf-8")
+    write_card(CARDS / "hero.svg", render_hero(profile))
+    write_card(CARDS / "contributions.svg", render_contributions(contributions))
+    write_card(CARDS / "contribution-graph.svg", render_graph(contributions))
+    write_card(CARDS / "stack.svg", render_stack(profile.get("stack_groups", [])))
     for i, tile in enumerate(profile["tiles"]):
         target = CARDS / "links" / f'{tile["id"]}.svg'
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(render_tile(tile["title"], tile["subtitle"], tile["href"], tile["accent"], 1.8+i*.35), encoding="utf-8")
+        write_card(target, render_tile(tile["title"], tile["subtitle"], tile["href"], tile["accent"], 1.8+i*.35))
     for i, repo in enumerate(profile["featured_repos"]):
         target = CARDS / "repos" / f'{repo["id"]}.svg'
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(render_repo(repo, 3.2+i*.45), encoding="utf-8")
+        write_card(target, render_repo(repo, 3.2+i*.45))
     # Fail closed: every generated SVG must be parseable XML.
     for path in CARDS.rglob("*.svg"):
         ET.parse(path)

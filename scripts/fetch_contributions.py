@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import tempfile
 from datetime import date, datetime, timezone
 from html.parser import HTMLParser
@@ -17,32 +18,89 @@ TARGET = ROOT / "data" / "contributions.json"
 
 
 class CalendarParser(HTMLParser):
-    """Extract valid contribution cells without trusting page attributes."""
+    """Extract valid contribution cells without trusting page attributes.
+
+    GitHub currently omits ``data-count`` and exposes the count in the
+    following ``<tool-tip>`` text, so support both markup shapes.
+    """
 
     def __init__(self) -> None:
         super().__init__()
         self.days: list[dict] = []
+        self._pending: dict | None = None
+        self._in_tooltip = False
+        self._tooltip_text: list[str] = []
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag == "tool-tip":
+            self._in_tooltip = True
+            self._tooltip_text = []
+            return
         if tag != "td":
             return
+        self._pending = None
         values = dict(attrs)
         raw_date = values.get("data-date")
         if not raw_date:
             return
         try:
             parsed_date = date.fromisoformat(raw_date)
-            count = int(values.get("data-count") or 0)
             level = int(values.get("data-level") or 0)
         except (TypeError, ValueError):
             return
-        if count < 0 or not 0 <= level <= 4:
+        if not 0 <= level <= 4:
             return
-        self.days.append({
+        count: int | None = None
+        raw_count = values.get("data-count")
+        if raw_count is not None:
+            try:
+                count = int(raw_count)
+            except (TypeError, ValueError):
+                return
+            if count < 0:
+                return
+        self._pending = {
             "date": parsed_date.isoformat(),
             "count": count,
             "level": level,
+        }
+        if count is not None:
+            self.days.append({
+                "date": self._pending["date"],
+                "count": count,
+                "level": level,
+            })
+            self._pending = None
+
+    def handle_data(self, data: str) -> None:
+        if self._in_tooltip:
+            self._tooltip_text.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag != "tool-tip" or not self._in_tooltip:
+            return
+        self._in_tooltip = False
+        if self._pending is None or self._pending["count"] is not None:
+            return
+        text = " ".join("".join(self._tooltip_text).split())
+        if "No contributions" in text:
+            count = 0
+        else:
+            match = re.search(r"(\d+)\s+contributions?\b", text)
+            if not match:
+                return
+            count = int(match.group(1))
+        self.days.append({
+            "date": self._pending["date"],
+            "count": count,
+            "level": self._pending["level"],
         })
+        self._pending = None
+
+    def close(self) -> None:
+        super().close()
+        self._pending = None
+        self._in_tooltip = False
 
 
 def parse_calendar(source: str) -> list[dict]:

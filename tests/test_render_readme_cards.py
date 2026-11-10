@@ -147,6 +147,24 @@ def test_calendar_parser_extracts_valid_cells_and_skips_malformed_values():
     ]
 
 
+def test_calendar_parser_uses_tooltip_counts_when_data_count_is_absent():
+    html = """
+    <td data-date="2026-11-08" data-level="3"></td>
+    <tool-tip>4 contributions on November 8th.</tool-tip>
+    <td data-date="2026-11-09" data-level="1"></td>
+    <tool-tip>1 contribution on November 9th.</tool-tip>
+    <td data-date="2026-11-10" data-level="0"></td>
+    <tool-tip>No contributions on November 10th.</tool-tip>
+    <td data-date="2026-11-11" data-level="2"></td>
+    <tool-tip>unexpected markup</tool-tip>
+    """
+    assert fetcher.parse_calendar(html) == [
+        {"date": "2026-11-08", "count": 4, "level": 3},
+        {"date": "2026-11-09", "count": 1, "level": 1},
+        {"date": "2026-11-10", "count": 0, "level": 0},
+    ]
+
+
 def test_calendar_parser_rejects_duplicate_dates():
     html = """
     <td data-date="2026-11-08" data-count="1" data-level="1"></td>

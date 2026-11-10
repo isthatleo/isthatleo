@@ -64,7 +64,7 @@ Expected result:
 - Fetches `https://github.com/users/isthatleo/contributions`.
 - Parses contribution calendar cells.
 - Writes `data/contributions.json` with `schema_version`, `username`, `source`, `fetched_at` and `days`.
-- Parses and validates ISO dates, non-negative counts and contribution levels (0–4); malformed cells are skipped.
+- Parses and validates ISO dates, non-negative counts and contribution levels (0–4) from either `data-count` attributes or the calendar's tooltip text; malformed cells are skipped.
 - Rejects duplicate dates rather than silently double-counting them.
 - The renderer validates required profile fields, absolute HTTP(S) destinations, unique safe asset IDs, six-digit hex accent colours and toolkit layout limits before writing assets.
 - Exits non-zero if no valid calendar cells are parsed.
@@ -163,6 +163,7 @@ Current test file: `tests/test_render_readme_cards.py`.
 | `test_readme_image_references_exist` | README asset integrity | Every local `cards/` image source referenced by README exists |
 | `test_readme_project_destinations_match_profile_configuration` | Link integrity | Each project card's README destination matches its configured URL |
 | `test_calendar_parser_extracts_valid_cells_and_skips_malformed_values` | Fetcher parsing | Valid dates/counts/levels are normalized; malformed, negative and out-of-range cells are ignored |
+| `test_calendar_parser_uses_tooltip_counts_when_data_count_is_absent` | Fetcher markup compatibility | Counts are read from calendar tooltip text when GitHub omits `data-count`; malformed tooltips are skipped |
 | `test_calendar_parser_rejects_duplicate_dates` | Fetcher integrity | Duplicate dates fail closed |
 | `test_empty_fetch_cannot_overwrite_existing_contributions` | Data safety | Empty results cannot replace an existing dataset |
 | `test_network_failure_does_not_touch_existing_dataset` | Network failure safety | A failed fetch leaves existing data unchanged |
