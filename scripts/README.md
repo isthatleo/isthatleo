@@ -45,7 +45,9 @@ To embed custom fonts, place licensed Geist WOFF files in `fonts/Geist-Regular.w
 2. Renderer succeeds in animated and `STATIC=1` modes.
 3. `python -m pytest -q` passes.
 4. Every generated SVG parses as XML.
-5. The grouped toolkit card renders from profile data and contains no unverified skill claims.
-6. Every image path referenced by README resolves in the repository.
-7. Reduced-motion users receive a static presentation.
-8. Review the rendered profile on GitHub desktop and mobile before calling the design complete.
+5. Profile configuration passes validation for required fields, safe unique asset IDs, HTTP(S) destinations, toolkit limits and tile colours.
+6. The grouped toolkit card renders from profile data and contains no unverified skill claims.
+7. Every image path referenced by README resolves in the repository.
+8. README project-card destinations match the configured project URLs.
+9. Reduced-motion users receive a static presentation.
+10. Review the rendered profile on GitHub desktop and mobile before calling the design complete.
