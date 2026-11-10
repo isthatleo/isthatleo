@@ -8,8 +8,6 @@
     <a href="https://github.com/isthatleo?tab=repositories">REPOSITORIES</a>
     &nbsp;·&nbsp;
     <a href="https://linkedin.com/in/notlxnrd">LINKEDIN</a>
-    &nbsp;·&nbsp;
-    <a href="mailto:">CONTACT</a>
   </p>
 </div>
 
