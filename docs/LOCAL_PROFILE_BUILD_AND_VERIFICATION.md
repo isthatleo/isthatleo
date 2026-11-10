@@ -255,14 +255,24 @@ Push to a feature branch and review the GitHub-rendered profile before merging t
 
 Workflow: `.github/workflows/update-profile-art.yml`.
 
-The workflow is intended to:
+The workflow is split into two jobs:
+
+**verify** (read-only permissions):
 1. Check out the repository.
-2. Set up Python 3.12.
+2. Set up Python 3.12 with pip caching.
 3. Install `scripts/requirements.txt`.
-4. Fetch contribution data.
-5. Render animated SVG assets.
-6. Run pytest.
-7. Commit refreshed contribution data and generated SVGs.
+4. Run the complete pytest suite.
+5. Run `git diff --check`.
+
+**refresh** (write permission; runs only after verify succeeds):
+1. Check out the repository and set up Python 3.12.
+2. Install `scripts/requirements.txt`.
+3. Fetch contribution data.
+4. Render animated SVG assets.
+5. Parse every generated SVG and assert the expected 10-file manifest count.
+6. Commit refreshed contribution data and generated SVGs.
+
+This separation means a contribution-source/network failure cannot hide the independent unit-test result. A failed verification job blocks publishing refreshed assets.
 
 Recent workflow attempts were failing almost immediately, with no exposed step list or useful job logs through the available GitHub API inspection. **The cause is not yet established.** Do not assume it is a Python/test failure or a runner-provisioning issue without checking the actual Actions run page.
 
@@ -271,8 +281,9 @@ On the PC:
 - Expand the `render` job and identify the exact failing step.
 - If no step starts, inspect repository/org Actions permissions, runner availability and workflow policy.
 - If dependency installation fails, compare Python version and requirements.
-- If fetch fails, inspect the HTTP response / page markup and confirm no data was overwritten.
-- If rendering or tests fail, reproduce the exact command locally and fix the underlying source.
+- If `verify` fails, inspect the pytest or whitespace-check step; the refresh job should be skipped.
+- If `refresh` fails at fetch, inspect the HTTP response / page markup and confirm no data was overwritten. The verification job should still have its own result.
+- If rendering or SVG validation fails, reproduce the exact command locally and fix the underlying source.
 - Re-run the workflow after the fix and retain the successful run URL in the project notes.
 
 The workflow currently uses major-version action tags (`actions/checkout@v4`, `actions/setup-python@v5`, `stefanzweifel/git-auto-commit-action@v5`). Consider pinning third-party actions to verified full commit SHAs as a separate supply-chain hardening task.
