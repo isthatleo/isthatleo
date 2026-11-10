@@ -7,7 +7,7 @@
     &nbsp;·&nbsp;
     <a href="https://github.com/isthatleo?tab=repositories">EXPLORE MY CODE</a>
     &nbsp;·&nbsp;
-    <a href="https://github.com/isthatleo/automatic-octo-spork">CURRENT BUILD</a>
+    <a href="https://github.com/isthatleo/automatic-octo-spork/tree/main/nancy-billion">CURRENT BUILD</a>
   </p>
 </div>
 
@@ -55,7 +55,7 @@ I’m especially interested in the space where **AI, software products, business
 <p><sub>A few products and systems that represent the problems I like working on.</sub></p>
 
 <div align="center">
-  <a href="https://github.com/isthatleo/automatic-octo-spork"><img src="./cards/repos/nancy.svg" width="100%" alt="NÅNCY / BILLION — private-first AI assistant platform" /></a>
+  <a href="https://github.com/isthatleo/automatic-octo-spork/tree/main/nancy-billion"><img src="./cards/repos/nancy.svg" width="100%" alt="NÅNCY / BILLION — private-first AI assistant platform" /></a>
   <br /><br />
   <a href="https://github.com/isthatleo/notlxnrd"><img src="./cards/repos/notlxnrd-os.svg" width="100%" alt="NOTLXNRD.OS — personal digital business operating system" /></a>
   <br /><br />
