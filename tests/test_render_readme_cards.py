@@ -110,6 +110,21 @@ def test_empty_fetch_cannot_overwrite_existing_contributions(tmp_path):
     assert target.read_text(encoding="utf-8") == original
 
 
+def test_network_failure_does_not_touch_existing_dataset(tmp_path, monkeypatch):
+    target = tmp_path / "contributions.json"
+    original = '{"trusted":"existing-data"}\\n'
+    target.write_text(original, encoding="utf-8")
+
+    def fail_fetch():
+        raise OSError("network unavailable")
+
+    monkeypatch.setattr(fetcher, "fetch_calendar", fail_fetch)
+    import pytest
+    with pytest.raises(OSError, match="network unavailable"):
+        fetcher.main()
+    assert target.read_text(encoding="utf-8") == original
+
+
 def test_fetch_write_is_valid_json_and_atomic_output_shape(tmp_path):
     target = tmp_path / "data" / "contributions.json"
     days = [{"date": "2026-11-10", "count": 3, "level": 2}]
