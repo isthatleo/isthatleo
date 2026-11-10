@@ -5,29 +5,6 @@
   "tagline": "I design and engineer software, AI systems and digital products — from architecture to the final interface.",
   "location": "Kampala, Uganda · Working globally",
   "website": "https://leonardlomude.vercel.app",
-  "tiles": [
-    {
-      "id": "build",
-      "title": "BUILD",
-      "subtitle": "Software · Products · Engineering",
-      "href": "https://leonardlomude.vercel.app",
-      "accent": "#2bb0cf"
-    },
-    {
-      "id": "systems",
-      "title": "SYSTEMS",
-      "subtitle": "Architecture · AI · Infrastructure",
-      "href": "https://github.com/isthatleo",
-      "accent": "#5b7cdf"
-    },
-    {
-      "id": "connect",
-      "title": "CONNECT",
-      "subtitle": "Ideas, collaboration and selected work",
-      "href": "https://linkedin.com/in/notlxnrd",
-      "accent": "#2f9d74"
-    }
-  ],
   "featured_repos": [
     {
       "id": "nancy",
@@ -56,6 +33,38 @@
       "description": "Trading education and operations tooling built around structured workflows, analytics and execution discipline.",
       "status": "TRADING TECHNOLOGY · SELECTED WORK",
       "url": "https://leonardlomude.vercel.app"
+    }
+  ],
+  "stack_groups": [
+    {
+      "title": "PRODUCT INTERFACES",
+      "items": [
+        "TypeScript",
+        "JavaScript",
+        "React",
+        "Next.js",
+        "HTML / CSS"
+      ]
+    },
+    {
+      "title": "SYSTEMS & BACKEND",
+      "items": [
+        "Rust",
+        "Python",
+        "FastAPI",
+        "Node.js",
+        "PostgreSQL"
+      ]
+    },
+    {
+      "title": "ENGINEERING PRACTICE",
+      "items": [
+        "API design",
+        "System architecture",
+        "Testing",
+        "Docker",
+        "Git / CI"
+      ]
     }
   ]
 }
