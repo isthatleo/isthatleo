@@ -205,6 +205,9 @@ def render_repo(repo: dict, delay: float) -> str:
             current = candidate
     if current:
         lines.append(current)
+    if len(lines) > 2:
+        lines = lines[:2]
+        lines[-1] = lines[-1].rstrip(" .") + "…"
     for index, line in enumerate(lines[:2]):
         s += f'<text x="30" y="{122 + index*22}" font-size="13" fill="{PALETTE["text"]}">{esc(line)}</text>'
     s += label(30, 177, "OPEN PROJECT  ↗", 9, PALETTE["signal"])
