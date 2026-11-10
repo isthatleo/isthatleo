@@ -41,7 +41,7 @@ To embed custom fonts, place licensed Geist WOFF files in `fonts/Geist-Regular.w
 
 ## Quality gates
 
-1. Contribution fetch succeeds or fails explicitly; empty data must not be presented as real activity.
+1. Contribution fetch validates dates, counts and levels, rejects duplicate dates, and atomically writes only valid non-empty data; network or parse failures preserve the previous dataset.
 2. Renderer succeeds in animated and `STATIC=1` modes.
 3. `python -m pytest -q` passes.
 4. Every generated SVG parses as XML.
