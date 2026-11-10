@@ -6,22 +6,47 @@ on:
     paths:
       - ".github/workflows/update-profile-art.yml"
       - "scripts/**"
+      - "tests/**"
       - "data/**"
       - "README.md"
   schedule:
     - cron: "23 5 * * *"
   workflow_dispatch:
 
-permissions:
-  contents: write
-
 concurrency:
   group: profile-card-refresh
   cancel-in-progress: false
 
 jobs:
-  render:
+  verify:
+    name: Verify renderer and profile data
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: scripts/requirements.txt
+      - name: Install dependencies
+        run: python -m pip install -r scripts/requirements.txt
+      - name: Run unit and renderer tests
+        run: python -m pytest -q
+      - name: Check patch whitespace
+        run: git diff --check
+
+  refresh:
+    name: Refresh contribution data and profile art
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,8 +60,19 @@ jobs:
         run: python scripts/fetch_contributions.py
       - name: Render animated SVG cards
         run: python scripts/render_readme_cards.py
-      - name: Run renderer tests
-        run: python -m pytest -q
+      - name: Validate generated SVG assets
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+
+          assets = sorted(Path("cards").rglob("*.svg"))
+          if len(assets) != 10:
+              raise SystemExit(f"Expected 10 SVG assets, found {len(assets)}")
+          for asset in assets:
+              ET.parse(asset)
+          print(f"Validated {len(assets)} SVG assets.")
+          PY
       - name: Commit generated profile art
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
