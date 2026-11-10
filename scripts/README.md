@@ -31,6 +31,8 @@ To embed custom fonts, place licensed Geist WOFF files in `fonts/Geist-Regular.w
 - Edit the profile narrative and section order in `README.md`.
 - Never invent contribution counts. `data/contributions.json` is populated by the fetch script.
 - Generated SVGs live in `cards/`; rerun the renderer after changing profile data or rendering code.
+- The toolkit graphic is generated from `stack_groups` in `data/profile.json`; keep the groups curated and factual.
+- Project descriptions and destinations must match the actual product or repository. Do not invent social URLs, metrics or deployment claims.
 
 ## Quality gates
 
@@ -38,6 +40,7 @@ To embed custom fonts, place licensed Geist WOFF files in `fonts/Geist-Regular.w
 2. Renderer succeeds in animated and `STATIC=1` modes.
 3. `python -m pytest -q` passes.
 4. Every generated SVG parses as XML.
-5. Every image path referenced by README resolves in the repository.
-6. Reduced-motion users receive a static presentation.
-7. Review the rendered profile on GitHub desktop and mobile before calling the design complete.
+5. The grouped toolkit card renders from profile data and contains no unverified skill claims.
+6. Every image path referenced by README resolves in the repository.
+7. Reduced-motion users receive a static presentation.
+8. Review the rendered profile on GitHub desktop and mobile before calling the design complete.
