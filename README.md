@@ -26,24 +26,24 @@ I’m especially interested in the space where **AI, software products, business
 <table>
   <tr>
     <td width="50%" valign="top">
-      **01 / AI & intelligent systems**
+      <strong>01 / AI &amp; intelligent systems</strong>
 
       Agent orchestration, tool use, memory, multimodal interfaces and private-first assistants.
     </td>
     <td width="50%" valign="top">
-      **02 / Product engineering**
+      <strong>02 / Product engineering</strong>
 
       Full-stack applications, thoughtful interfaces, APIs, data models and production workflows.
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
-      **03 / Business infrastructure**
+      <strong>03 / Business infrastructure</strong>
 
       ERP platforms, education operations, automation and connected business workflows.
     </td>
     <td width="50%" valign="top">
-      **04 / Trading technology**
+      <strong>04 / Trading technology</strong>
 
       Market tooling, trading journals, risk workflows and analytics for disciplined execution.
     </td>
