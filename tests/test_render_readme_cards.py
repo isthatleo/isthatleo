@@ -48,6 +48,18 @@ def test_svg_is_well_formed():
     assert "Build &lt;ship&gt;" in svg
 
 
+def test_project_description_truncation_is_visible_and_escaped():
+    svg = renderer.render_repo({
+        "id": "sample",
+        "name": "A & B",
+        "description": "A long description with enough words to wrap across more than two lines " * 5,
+        "status": "ACTIVE",
+    }, 0)
+    ET.fromstring(svg)
+    assert "A &amp; B" in svg
+    assert "…" in svg
+
+
 def test_stack_card_is_well_formed():
     svg = renderer.render_stack([
         {"title": "PRODUCT", "items": ["TypeScript", "React"]},
