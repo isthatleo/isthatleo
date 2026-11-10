@@ -1,21 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="300" viewBox="0 0 960 300" role="img" aria-labelledby="title desc">
-<title id="title">NOTLXNRD engineering toolkit</title>
-<desc id="desc">Selected tools and engineering practices grouped by discipline.</desc>
-<defs><linearGradient id="accent" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2bb0cf"/><stop offset="1" stop-color="#1b93b1"/></linearGradient></defs>
-<style>text{font-family:Arial,sans-serif}.mono{font-family:monospace}</style>
-<rect x=".5" y=".5" width="959" height="299" rx="18" fill="#0e1116" stroke="#222933"/>
-<text class="mono" x="30" y="34" font-size="10" fill="#2bb0cf">ENGINEERING TOOLKIT / SELECTED PRACTICE</text>
-<g fill="#0b1016" stroke="#26323c">
-<rect x="30" y="66" width="292" height="198" rx="14"/><rect x="346" y="66" width="292" height="198" rx="14"/><rect x="662" y="66" width="268" height="198" rx="14"/>
-</g>
-<g font-family="monospace" font-size="10" fill="#2bb0cf">
-<text x="48" y="98">01 / PRODUCT INTERFACES</text><text x="364" y="98">02 / SYSTEMS &amp; BACKEND</text><text x="680" y="98">03 / ENGINEERING PRACTICE</text>
-</g>
-<g stroke="#26323c"><path d="M48 114H304M364 114H620M680 114H912"/></g>
-<g fill="#45bad2"><circle cx="52" cy="144" r="3"/><circle cx="52" cy="167" r="3"/><circle cx="52" cy="190" r="3"/><circle cx="52" cy="213" r="3"/><circle cx="52" cy="236" r="3"/><circle cx="368" cy="144" r="3"/><circle cx="368" cy="167" r="3"/><circle cx="368" cy="190" r="3"/><circle cx="368" cy="213" r="3"/><circle cx="368" cy="236" r="3"/><circle cx="684" cy="144" r="3"/><circle cx="684" cy="167" r="3"/><circle cx="684" cy="190" r="3"/><circle cx="684" cy="213" r="3"/><circle cx="684" cy="236" r="3"/></g>
-<g font-size="13" fill="#a8b1be">
-<text x="64" y="148">TypeScript</text><text x="64" y="171">JavaScript</text><text x="64" y="194">React</text><text x="64" y="217">Next.js</text><text x="64" y="240">HTML / CSS</text>
-<text x="380" y="148">Rust</text><text x="380" y="171">Python</text><text x="380" y="194">FastAPI</text><text x="380" y="217">Node.js</text><text x="380" y="240">PostgreSQL</text>
-<text x="696" y="148">API design</text><text x="696" y="171">System architecture</text><text x="696" y="194">Testing</text><text x="696" y="217">Docker</text><text x="696" y="240">Git / CI</text>
-</g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="300" viewBox="0 0 960 300" role="img">
+    <title>NOTLXNRD profile card</title><defs>
+      <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2bb0cf"/><stop offset="1" stop-color="#1b93b1"/></linearGradient>
+      <clipPath id="clip"><rect x="1" y="1" width="958" height="298" rx="18"/></clipPath>
+    </defs><style>
+
+      text{font-family:Geist,'Arial',sans-serif} .mono{font-family:'Geist Mono',monospace}
+
+      @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+      @keyframes reveal{from{opacity:0}to{opacity:1}}
+      @keyframes sweep{0%{transform:translateX(-120%)}100%{transform:translateX(220%)}}
+      .enter{opacity:0;animation:rise .75s cubic-bezier(.2,.8,.2,1) 2.00s both}
+      .fade{opacity:0;animation:reveal .7s ease 2.18s both}
+      .shine{animation:sweep 5s ease-in-out 3.50s infinite}
+
+      @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;opacity:1!important;transform:none!important}animate,animateTransform,set{display:none!important}}
+    </style>
+    <rect x=".5" y=".5" width="959" height="299" rx="18" fill="#0e1116" stroke="#222933"/>
+    <g clip-path="url(#clip)"><text class="mono" x="30" y="34" font-size="10" fill="#2bb0cf">ENGINEERING TOOLKIT  /  SELECTED PRACTICE</text><rect x="30" y="66" width="292" height="198" rx="14" fill="#0b1016" stroke="#26323c"/><text class="mono" x="48" y="98" font-size="10" fill="#2bb0cf">01  /  PRODUCT INTERFACES</text><path d="M48 114H304" stroke="#26323c"/><circle cx="52" cy="140" r="3" fill="#45bad2"/><text x="64" y="144" font-size="13" fill="#a8b1be">TypeScript</text><circle cx="52" cy="163" r="3" fill="#45bad2"/><text x="64" y="167" font-size="13" fill="#a8b1be">JavaScript</text><circle cx="52" cy="186" r="3" fill="#45bad2"/><text x="64" y="190" font-size="13" fill="#a8b1be">React</text><circle cx="52" cy="209" r="3" fill="#45bad2"/><text x="64" y="213" font-size="13" fill="#a8b1be">Next.js</text><circle cx="52" cy="232" r="3" fill="#45bad2"/><text x="64" y="236" font-size="13" fill="#a8b1be">HTML / CSS</text><rect x="346" y="66" width="292" height="198" rx="14" fill="#0b1016" stroke="#26323c"/><text class="mono" x="364" y="98" font-size="10" fill="#2bb0cf">02  /  SYSTEMS &amp; BACKEND</text><path d="M364 114H620" stroke="#26323c"/><circle cx="368" cy="140" r="3" fill="#45bad2"/><text x="380" y="144" font-size="13" fill="#a8b1be">Rust</text><circle cx="368" cy="163" r="3" fill="#45bad2"/><text x="380" y="167" font-size="13" fill="#a8b1be">Python</text><circle cx="368" cy="186" r="3" fill="#45bad2"/><text x="380" y="190" font-size="13" fill="#a8b1be">FastAPI</text><circle cx="368" cy="209" r="3" fill="#45bad2"/><text x="380" y="213" font-size="13" fill="#a8b1be">Node.js</text><circle cx="368" cy="232" r="3" fill="#45bad2"/><text x="380" y="236" font-size="13" fill="#a8b1be">PostgreSQL</text><rect x="662" y="66" width="292" height="198" rx="14" fill="#0b1016" stroke="#26323c"/><text class="mono" x="680" y="98" font-size="10" fill="#2bb0cf">03  /  ENGINEERING PRACTICE</text><path d="M680 114H936" stroke="#26323c"/><circle cx="684" cy="140" r="3" fill="#45bad2"/><text x="696" y="144" font-size="13" fill="#a8b1be">API design</text><circle cx="684" cy="163" r="3" fill="#45bad2"/><text x="696" y="167" font-size="13" fill="#a8b1be">System architecture</text><circle cx="684" cy="186" r="3" fill="#45bad2"/><text x="696" y="190" font-size="13" fill="#a8b1be">Testing</text><circle cx="684" cy="209" r="3" fill="#45bad2"/><text x="696" y="213" font-size="13" fill="#a8b1be">Docker</text><circle cx="684" cy="232" r="3" fill="#45bad2"/><text x="696" y="236" font-size="13" fill="#a8b1be">Git / CI</text></g></svg>
