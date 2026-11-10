@@ -160,24 +160,29 @@ def rect(x: int, y: int, w: int, h: int, fill: str, rx: int = 8, opacity: float 
     return f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{rx}" fill="{fill}" opacity="{opacity}"/>'
 
 def render_hero(profile: dict) -> str:
-    """Render the editorial NOTLXNRD hero banner."""
+    """Render the NOTLXNRD editorial identity banner."""
     name, role = profile["name"], profile["role"]
     tagline, loc = profile["tagline"], profile["location"]
-    s = svg_start(1200, 330, 0)
-    s += '<defs><linearGradient id="hero-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#101820"/><stop offset=".58" stop-color="#090d12"/><stop offset="1" stop-color="#10151c"/></linearGradient><radialGradient id="hero-glow"><stop stop-color="#2bb0cf" stop-opacity=".22"/><stop offset="1" stop-color="#2bb0cf" stop-opacity="0"/></radialGradient><pattern id="hero-grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#9eb5c3" stroke-opacity=".055"/></pattern></defs>'
-    s += '<rect width="1200" height="330" rx="22" fill="url(#hero-bg)"/><rect width="1200" height="330" rx="22" fill="url(#hero-grid)"/><circle cx="1000" cy="120" r="280" fill="url(#hero-glow)"/><path d="M0 1H1200" stroke="url(#accent)" stroke-width="2"/>'
-    s += label(58, 58, "NOTLXNRD  /  PERSONAL ENGINEERING PROFILE", 12, "#58c7dc")
-    s += '<rect x="58" y="82" width="42" height="3" rx="1.5" fill="url(#accent)"/>'
-    s += f'<text class="enter" x="54" y="166" font-size="67" font-weight="720" letter-spacing="-3.5" fill="{PALETTE["white"]}">{esc(name)}</text>'
-    s += f'<text class="fade" x="59" y="207" font-size="22" font-weight="550" fill="#62c9dd">{esc(role)}</text>'
-    s += f'<text class="fade" x="59" y="249" font-size="15" fill="{PALETTE["text"]}">{esc(tagline)}</text>'
-    s += label(59, 310, loc.upper(), 10, PALETTE["muted"])
-    s += '<rect x="850" y="84" width="292" height="174" rx="16" fill="#0c1218" stroke="#263642"/>'
-    s += label(878, 119, "ENGINEERING / 001", 10, "#718491")
-    s += '<circle cx="1105" cy="113" r="5" fill="#55c6dc"><animate attributeName="opacity" values=".25;.9;.25" dur="4s" repeatCount="indefinite"/></circle><path d="M878 139H1114" stroke="#25333d"/>'
-    s += label(878, 172, "AI SYSTEMS", 11, "#d5e0e7")
-    s += label(878, 199, "PRODUCT ENGINEERING", 11, "#d5e0e7")
-    s += label(878, 226, "BUSINESS SOFTWARE", 11, "#d5e0e7")
+    s = svg_start(1200, 430, 0)
+    s += '''<defs>
+      <linearGradient id="editorial-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#171916"/><stop offset=".52" stop-color="#101210"/><stop offset="1" stop-color="#080a09"/></linearGradient>
+      <linearGradient id="editorial-acid" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d5ff70"/><stop offset="1" stop-color="#8da94b"/></linearGradient>
+      <pattern id="editorial-grid" width="38" height="38" patternUnits="userSpaceOnUse"><path d="M38 0H0V38" fill="none" stroke="#d8e2c9" stroke-opacity=".07"/></pattern>
+      <filter id="editorial-blur"><feGaussianBlur stdDeviation="32"/></filter>
+    </defs>'''
+    s += '<rect width="1200" height="430" fill="url(#editorial-bg)"/><rect width="1200" height="430" fill="url(#editorial-grid)"/>'
+    s += '<ellipse cx="1000" cy="190" rx="210" ry="150" fill="#b4d66b" opacity=".12" filter="url(#editorial-blur)"/>'
+    s += '<path d="M790 0V430M830 0V430M870 0V430M910 0V430M950 0V430M990 0V430M1030 0V430M1070 0V430M1110 0V430" stroke="#d6e6b7" stroke-opacity=".09"/>'
+    s += '<path d="M770 315L930 55H1150L990 315Z" fill="none" stroke="url(#editorial-acid)" stroke-width="2" opacity=".8"/>'
+    s += '<path d="M855 315L1015 55M940 315L1100 55" stroke="#d7f19b" stroke-opacity=".28"/><path d="M930 55H1150V275" fill="none" stroke="#d9f5a4" stroke-width="5"/>'
+    s += '<circle cx="1040" cy="180" r="74" fill="none" stroke="#d9f5a4" stroke-opacity=".45"/><circle cx="1040" cy="180" r="44" fill="none" stroke="#d9f5a4" stroke-opacity=".7"/><circle cx="1040" cy="180" r="5" fill="#d9f5a4"/>'
+    s += label(58, 62, "INDEPENDENT ENGINEERING  /  " + loc.upper(), 12, "#c5e88b")
+    s += f'<text class="enter" x="48" y="202" fill="#f0f1e9" font-size="112" font-weight="800" letter-spacing="-8">{esc(name.upper() if len(name) <= 14 else name)}</text>'
+    s += '<path d="M60 230H650" stroke="#d5ff70" stroke-width="3"/>'
+    s += f'<text class="fade" x="62" y="280" fill="#e6e8df" font-size="27" font-weight="600">{esc(role)}</text>'
+    s += f'<text class="fade" x="62" y="319" fill="#aeb3a5" font-size="19">{esc(tagline)}</text>'
+    s += label(62, 385, "AI SYSTEMS  /  PRODUCT ENGINEERING  /  DIGITAL INFRASTRUCTURE", 12, "#92998a")
+    s += label(1140, 390, "BUILDING WITH INTENT", 12, "#c5e88b")
     return s + svg_end()
 
 def derive_stats(data: dict) -> dict:
