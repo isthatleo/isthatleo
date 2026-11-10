@@ -64,7 +64,10 @@ Expected result:
 - Fetches `https://github.com/users/isthatleo/contributions`.
 - Parses contribution calendar cells.
 - Writes `data/contributions.json` with `schema_version`, `username`, `source`, `fetched_at` and `days`.
-- Exits non-zero if no calendar cells are parsed. It must not overwrite existing contribution data with an empty result.
+- Parses and validates ISO dates, non-negative counts and contribution levels (0–4); malformed cells are skipped.
+- Rejects duplicate dates rather than silently double-counting them.
+- Exits non-zero if no valid calendar cells are parsed.
+- Writes through a temporary file in the target directory, then atomically replaces the dataset only after a valid non-empty fetch. Network, parse and empty-result failures leave the previous file untouched.
 
 Network access is required. No GitHub token is currently required by this public HTML fetcher. If GitHub changes its page markup or rate-limits the request, stop and investigate; do not fabricate data or manually fill counts.
 
@@ -151,6 +154,13 @@ Current test file: `tests/test_render_readme_cards.py`.
 | `test_stack_card_is_well_formed` | Toolkit rendering | Toolkit output parses and contains the supplied group items |
 | `test_empty_contributions_are_not_rendered_as_zero_metrics` | Empty-data honesty | Empty contribution data displays the waiting state, not invented metrics |
 | `test_readme_image_references_exist` | README asset integrity | Every local `cards/` image source referenced by README exists |
+| `test_calendar_parser_extracts_valid_cells_and_skips_malformed_values` | Fetcher parsing | Valid dates/counts/levels are normalized; malformed, negative and out-of-range cells are ignored |
+| `test_calendar_parser_rejects_duplicate_dates` | Fetcher integrity | Duplicate dates fail closed |
+| `test_empty_fetch_cannot_overwrite_existing_contributions` | Data safety | Empty results cannot replace an existing dataset |
+| `test_network_failure_does_not_touch_existing_dataset` | Network failure safety | A failed fetch leaves existing data unchanged |
+| `test_fetch_write_is_valid_json_and_atomic_output_shape` | Output contract | Successful writes contain schema metadata and normalized days with no leftover temp files |
+| `test_every_generated_asset_is_well_formed_and_matches_manifest` | Full renderer integration | All 10 expected SVGs are generated and parse as XML |
+| `test_static_and_animated_svg_modes` | Motion modes | Static output omits keyframes; animated output includes reduced-motion handling |
 
 ### Additional manual / release gates
 
@@ -170,7 +180,7 @@ These are required even when pytest passes:
 
 ### Known coverage gaps to address during local verification
 
-The current automated suite is a baseline, not a complete production test suite. Extend it to cover:
+The automated suite now covers parser fixtures, duplicate dates, empty/network failure safety, atomic output, all generated SVGs, the asset manifest and motion modes. Remaining hardening opportunities include:
 - Contribution fetcher parsing using saved HTML fixtures (no network in unit tests).
 - Fetcher behavior for malformed/empty HTML and network failures, proving existing data remains untouched.
 - Invalid or missing profile keys and malformed contribution records.
@@ -270,7 +280,7 @@ The profile refresh is complete only when all are true:
 - [ ] Contribution fetch succeeds, or a documented source failure is handled without corrupting existing data.
 - [ ] Animated and static rendering both succeed.
 - [ ] All 10 generated SVG assets are present and parseable.
-- [ ] Full pytest suite passes.
+- [ ] Full pytest suite passes locally and in GitHub Actions.
 - [ ] README image references and project destinations are verified.
 - [ ] Desktop and mobile GitHub rendering reviewed.
 - [ ] Git diff contains only intentional source/data/generated-art/documentation changes.
