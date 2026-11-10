@@ -10,6 +10,10 @@ This repository is the source for the public GitHub profile at [github.com/istha
 - **Motion:** subtle SVG entrance/reveal effects; all generated motion must respect `prefers-reduced-motion`.
 - **Content:** keep claims factual, projects clearly described, and activity metrics sourced from GitHub contribution data.
 
+## Full PC setup and verification runbook
+
+For a clean clone, Windows/macOS/Linux setup, the complete 10-file SVG asset manifest, test inventory, manual release gates, Git workflow and Actions troubleshooting, follow [`docs/LOCAL_PROFILE_BUILD_AND_VERIFICATION.md`](../docs/LOCAL_PROFILE_BUILD_AND_VERIFICATION.md).
+
 ## Local workflow
 
 Run from the repository root:
@@ -19,6 +23,7 @@ python -m pip install -r scripts/requirements.txt
 python scripts/fetch_contributions.py
 python scripts/render_readme_cards.py
 STATIC=1 python scripts/render_readme_cards.py
+python scripts/render_readme_cards.py  # restore animated release assets
 python -m pytest -q
 ```
 
