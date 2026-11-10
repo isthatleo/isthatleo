@@ -96,21 +96,24 @@ def rect(x: int, y: int, w: int, h: int, fill: str, rx: int = 8, opacity: float 
     return f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{rx}" fill="{fill}" opacity="{opacity}"/>'
 
 def render_hero(profile: dict) -> str:
-    name = profile["name"]
-    role = profile["role"]
-    tagline = profile["tagline"]
-    loc = profile["location"]
-    s = svg_start(960, 230, 0)
-    s += f'<circle cx="850" cy="35" r="115" fill="{PALETTE["signal"]}" opacity=".06"/>'
-    s += f'<circle cx="850" cy="35" r="78" fill="none" stroke="{PALETTE["signal"]}" opacity=".18"/>'
-    if not STATIC:
-        s += '<circle cx="850" cy="35" r="78" fill="none" stroke="url(#accent)" stroke-width="1.5" opacity=".22"><animate attributeName="opacity" values=".08;.34;.08" dur="5s" begin="1s" repeatCount="indefinite"/></circle>'
-    s += label(42, 48, "NOTLXNRD  /  ENGINEERING PROFILE", 11, PALETTE["signal"])
-    s += f'<text class="enter" x="40" y="112" font-size="54" font-weight="650" letter-spacing="-2.4" fill="{PALETTE["white"]}">{esc(name)}</text>'
-    s += f'<text class="fade" x="43" y="151" font-size="17" fill="{PALETTE["signal"]}">{esc(role)}</text>'
-    s += f'<text class="fade" x="43" y="181" font-size="13" fill="{PALETTE["text"]}">{esc(tagline)}</text>'
-    s += label(43, 207, loc.upper(), 10, PALETTE["muted"])
-    s += f'<path d="M790 170h105" stroke="{PALETTE["line2"]}"/><circle cx="900" cy="170" r="4" fill="{PALETTE["signal"]}"/>'
+    """Render the editorial NOTLXNRD hero banner."""
+    name, role = profile["name"], profile["role"]
+    tagline, loc = profile["tagline"], profile["location"]
+    s = svg_start(1200, 330, 0)
+    s += '<defs><linearGradient id="hero-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#101820"/><stop offset=".58" stop-color="#090d12"/><stop offset="1" stop-color="#10151c"/></linearGradient><radialGradient id="hero-glow"><stop stop-color="#2bb0cf" stop-opacity=".22"/><stop offset="1" stop-color="#2bb0cf" stop-opacity="0"/></radialGradient><pattern id="hero-grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#9eb5c3" stroke-opacity=".055"/></pattern></defs>'
+    s += '<rect width="1200" height="330" rx="22" fill="url(#hero-bg)"/><rect width="1200" height="330" rx="22" fill="url(#hero-grid)"/><circle cx="1000" cy="120" r="280" fill="url(#hero-glow)"/><path d="M0 1H1200" stroke="url(#accent)" stroke-width="2"/>'
+    s += label(58, 58, "NOTLXNRD  /  PERSONAL ENGINEERING PROFILE", 12, "#58c7dc")
+    s += '<rect x="58" y="82" width="42" height="3" rx="1.5" fill="url(#accent)"/>'
+    s += f'<text class="enter" x="54" y="166" font-size="67" font-weight="720" letter-spacing="-3.5" fill="{PALETTE["white"]}">{esc(name)}</text>'
+    s += f'<text class="fade" x="59" y="207" font-size="22" font-weight="550" fill="#62c9dd">{esc(role)}</text>'
+    s += f'<text class="fade" x="59" y="249" font-size="15" fill="{PALETTE["text"]}">{esc(tagline)}</text>'
+    s += label(59, 310, loc.upper(), 10, PALETTE["muted"])
+    s += '<rect x="850" y="84" width="292" height="174" rx="16" fill="#0c1218" stroke="#263642"/>'
+    s += label(878, 119, "ENGINEERING / 001", 10, "#718491")
+    s += '<circle cx="1105" cy="113" r="5" fill="#55c6dc"><animate attributeName="opacity" values=".25;.9;.25" dur="4s" repeatCount="indefinite"/></circle><path d="M878 139H1114" stroke="#25333d"/>'
+    s += label(878, 172, "AI SYSTEMS", 11, "#d5e0e7")
+    s += label(878, 199, "PRODUCT ENGINEERING", 11, "#d5e0e7")
+    s += label(878, 226, "BUSINESS SOFTWARE", 11, "#d5e0e7")
     return s + svg_end()
 
 def derive_stats(data: dict) -> dict:
@@ -180,12 +183,27 @@ def render_tile(title: str, subtitle: str, href: str, accent: str, delay: float)
     return s + svg_end()
 
 def render_repo(repo: dict, delay: float) -> str:
-    s = svg_start(960, 178, delay)
-    s += label(30, 36, repo.get("eyebrow", "SELECTED WORK").upper(), 10, PALETTE["signal"])
-    s += f'<text class="enter" x="30" y="78" font-size="27" font-weight="620" fill="{PALETTE["white"]}">{esc(repo["name"])}</text>'
-    s += f'<text x="30" y="108" font-size="13" fill="{PALETTE["text"]}">{esc(repo["description"])}</text>'
-    s += label(30, 145, repo.get("status", "In development").upper(), 9, PALETTE["muted"])
-    s += f'<path d="M865 85h45m-8-8 8 8-8 8" stroke="{PALETTE["signal"]}" fill="none" stroke-width="1.5"/>'
+    """Render a project as a compact editorial case-study panel."""
+    s = svg_start(960, 198, delay)
+    s += '<rect x="1" y="1" width="958" height="196" rx="18" fill="#0b1016" stroke="#26323c"/>'
+    s += '<path d="M1 18Q1 1 18 1H942Q959 1 959 18" fill="none" stroke="url(#accent)" stroke-width="2" opacity=".8"/>'
+    s += label(30, 38, repo.get("status", "SELECTED WORK").upper(), 10, PALETTE["signal"])
+    s += f'<text class="enter" x="30" y="88" font-size="29" font-weight="650" letter-spacing="-.8" fill="{PALETTE["white"]}">{esc(repo["name"])}</text>'
+    desc = repo["description"]
+    words, lines, current = desc.split(), [], ""
+    for word in words:
+        candidate = (current + " " + word).strip()
+        if len(candidate) > 94 and current:
+            lines.append(current)
+            current = word
+        else:
+            current = candidate
+    if current:
+        lines.append(current)
+    for index, line in enumerate(lines[:2]):
+        s += f'<text x="30" y="{122 + index*22}" font-size="13" fill="{PALETTE["text"]}">{esc(line)}</text>'
+    s += label(30, 177, "OPEN PROJECT  ↗", 9, PALETTE["signal"])
+    s += '<circle cx="891" cy="91" r="34" fill="#2bb0cf" opacity=".07"/><path d="M875 91h31m-9-9 9 9-9 9" stroke="#55c6dc" fill="none" stroke-width="1.7"/>'
     return s + svg_end()
 
 def render_graph(data: dict) -> str:
