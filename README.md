@@ -1,42 +1,29 @@
 <div align="center">
-  <img src="./cards/hero.svg" width="100%" alt="NOTLXNRD — Software engineer. Systems thinker." />
+  <img src="./cards/hero.svg" width="100%" alt="NOTLXNRD — Leonard Lomude, software engineer and product builder" />
 </div>
 
 <div align="center">
-  <a href="https://leonardlomude.vercel.app">PORTFOLIO</a> &nbsp; / &nbsp;
-  <a href="https://github.com/isthatleo?tab=repositories">CODE ARCHIVE</a> &nbsp; / &nbsp;
+  <a href="https://leonardlomude.vercel.app">PORTFOLIO</a> &nbsp;/&nbsp;
+  <a href="https://github.com/isthatleo?tab=repositories">CODE</a> &nbsp;/&nbsp;
   <a href="https://github.com/isthatleo/automatic-octo-spork/tree/main/nancy-billion">CURRENT SYSTEM</a>
 </div>
 
-<br />
+---
 
-<table>
-<tr>
-<td width="58%" valign="top">
+## THE PRACTICE
 
-### THE PRACTICE
+I’m Leonard Lomude — an independent software engineer working at the intersection of **AI systems, product engineering and business software**.
 
-I’m Leonard Lomude — an independent software engineer building at the intersection of **AI, product engineering and business systems**.
+I build the whole chain: the problem, the architecture, the interface, the data, the deployment, and what happens when real people use the thing.
 
-I care about the full chain: the problem, the architecture, the interface, the data, the deployment and what happens when real people use the thing.
+Based in Kampala, Uganda. Working globally.
 
-I work from Kampala, Uganda, with a global outlook.
-
-</td>
-<td width="42%" valign="top">
-
-### CURRENT FIXATION
-
-**Making complex systems feel simple.**
+**CURRENT FIXATION — making complex systems feel simple:**
 
 - Private-first AI and agent infrastructure
-- Software products with clear interaction design
+- Software products with deliberate interaction design
 - Reliable platforms for real operational work
 - Tools that turn data into better decisions
-
-</td>
-</tr>
-</table>
 
 ---
 
@@ -44,104 +31,37 @@ I work from Kampala, Uganda, with a global outlook.
 
 *Four problem spaces. Four ongoing attempts to make something useful.*
 
-<table>
-<tr>
-<td width="50%" valign="top">
+<a href="https://github.com/isthatleo/automatic-octo-spork/tree/main/nancy-billion"><img src="./cards/repos/nancy.svg" width="100%" alt="NÅNCY / BILLION — private-first AI assistant platform" /></a>
 
-<img src="./cards/repos/nancy.svg" width="100%" alt="NÅNCY / BILLION" />
+<a href="https://github.com/isthatleo/notlxnrd"><img src="./cards/repos/notlxnrd-os.svg" width="100%" alt="NOTLXNRD.OS — personal software platform" /></a>
 
-**01 — NÅNCY / BILLION**
+<a href="https://leonardlomude.vercel.app"><img src="./cards/repos/roxan.svg" width="100%" alt="ROXAN — education operations software" /></a>
 
-A private-first AI assistant platform exploring orchestration, memory, tools, multimodal interaction and a unified command environment.
-
-AI SYSTEMS · AGENT INFRASTRUCTURE
-
-<a href="https://github.com/isthatleo/automatic-octo-spork/tree/main/nancy-billion">EXPLORE THE BUILD ↗</a>
-
-</td>
-<td width="50%" valign="top">
-
-<img src="./cards/repos/notlxnrd-os.svg" width="100%" alt="NOTLXNRD.OS" />
-
-**02 — NOTLXNRD.OS**
-
-A personal software platform connecting a public-facing experience with private operations, client workflows and an AI layer.
-
-PRODUCT ENGINEERING · PLATFORM DESIGN
-
-<a href="https://github.com/isthatleo/notlxnrd">EXPLORE THE BUILD ↗</a>
-
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
-
-<img src="./cards/repos/roxan.svg" width="100%" alt="ROXAN" />
-
-**03 — ROXAN**
-
-Education operations software focused on connected school administration, reporting and institutional workflows.
-
-EDTECH · BUSINESS SOFTWARE
-
-<a href="https://leonardlomude.vercel.app">PROJECT OVERVIEW ↗</a>
-
-</td>
-<td width="50%" valign="top">
-
-<img src="./cards/repos/trade-titans.svg" width="100%" alt="TRADE TITANS" />
-
-**04 — TRADE TITANS**
-
-Trading education and operations tooling built around structured workflows, performance review and execution discipline.
-
-TRADING TECHNOLOGY · ANALYTICS
-
-<a href="https://leonardlomude.vercel.app">PROJECT OVERVIEW ↗</a>
-
-</td>
-</tr>
-</table>
+<a href="https://leonardlomude.vercel.app"><img src="./cards/repos/trade-titans.svg" width="100%" alt="TRADE TITANS — trading education and operations tooling" /></a>
 
 ---
 
-## THE TOOLBOX
+## THE TOOLKIT
 
-I choose the stack around the constraints. Current working tools include:
+<img src="./cards/stack.svg" width="100%" alt="Selected engineering technologies and practices, grouped by discipline" />
 
-**INTERFACES**  
-TypeScript · JavaScript · React · Next.js · HTML · CSS
+---
 
-**SYSTEMS**  
-Rust · Python · FastAPI · Node.js · PostgreSQL
+## ACTIVITY
 
-**ENGINEERING**  
-API design · System architecture · Testing · Docker · Git · CI/CD
+<img src="./cards/activity.svg" width="100%" alt="GitHub activity summary, populated from verified public contribution data" />
 
 ---
 
 ## PRINCIPLES
 
-|  | |
-|:--|:--|
-| **Clarity over cleverness** | The best architecture is one a team can reason about. |
-| **Useful over impressive** | A product earns its complexity by solving a real problem. |
-| **Evidence over theatre** | Test what ships. Measure what matters. Say what is unfinished. |
-| **Design is engineering** | The interface is part of the system, not decoration added later. |
+- **Clarity over cleverness** — the best architecture is one a team can reason about.
+- **Useful over impressive** — a product earns its complexity by solving a real problem.
+- **Evidence over theatre** — test what ships, measure what matters, say what is unfinished.
+- **Design is engineering** — the interface is part of the system, not decoration added later.
 
 ---
 
 <div align="center">
-
-### HAVE A GOOD PROBLEM?
-
-I’m interested in thoughtful collaborations, difficult engineering problems and products with a reason to exist.
-
-<a href="https://leonardlomude.vercel.app">LET’S BUILD SOMETHING USEFUL ↗</a>
-
-<br /><br />
-
-<sub>NOTLXNRD — SOFTWARE / SYSTEMS / PRODUCTS</sub><br />
-<sub>KAMPALA, UGANDA · WORKING GLOBALLY</sub>
-
+  <img src="./cards/cta.svg" width="100%" alt="Open to thoughtful collaborations, difficult engineering problems and products with a reason to exist" />
 </div>

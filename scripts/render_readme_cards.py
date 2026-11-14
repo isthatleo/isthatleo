@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Render self-contained animated SVG cards for the @isthatleo GitHub profile."""
+"""Render self-contained animated SVG cards for the @isthatleo GitHub profile.
+
+Visual direction: luxury editorial x cyber-industrial. Graphite foundation,
+restrained acid-lime signal, oversized display type, architectural geometry.
+Every card is drawn at the width it is displayed at on GitHub so type never
+shrinks below its intended size.
+"""
 from __future__ import annotations
 
 import base64
@@ -8,10 +14,9 @@ import json
 import os
 import re
 import subprocess
-import sys
 import xml.etree.ElementTree as ET
 from collections import defaultdict
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, timedelta
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
@@ -24,22 +29,30 @@ CONTRIB_PATH = DATA / "contributions.json"
 STATIC = os.getenv("STATIC", "0") == "1"
 
 PALETTE = {
-    "bg": "#07090c", "surface": "#0e1116", "raised": "#161b22",
-    "line": "#222933", "line2": "#2c343e", "white": "#eef1f5",
-    "text": "#a8b1be", "muted": "#7f8a98", "faint": "#5d6774",
-    "signal": "#2bb0cf", "signal2": "#1b93b1", "success": "#2f9d74",
+    "bg": "#0b0d0b", "surface": "#101310", "raised": "#161a15",
+    "line": "#242922", "line2": "#343a2c", "white": "#eef1e8",
+    "text": "#b7bfae", "muted": "#8a9282", "faint": "#5f6759",
+    "signal": "#d5ff70", "signal2": "#9dbd4a", "success": "#7fa86a",
 }
-LIGHT = {"bg": "#f8f6f1", "surface": "#ffffff", "line": "#e4e0d5",
-         "white": "#1a1d21", "text": "#4b4f55", "muted": "#70716c",
-         "signal": "#0b8fad"}
+
+# Card canvases are authored at the width GitHub renders them, so text keeps
+# its designed size instead of being scaled down inside a narrow column.
+HERO_SIZE = (1200, 430)
+REPO_SIZE = (960, 240)
+STACK_SIZE = (960, 300)
+ACTIVITY_SIZE = (960, 200)
+CTA_SIZE = (960, 170)
+
 
 def esc(value: Any) -> str:
     return html.escape(str(value), quote=True)
+
 
 def load_json(path: Path, default: Any) -> Any:
     if not path.exists():
         return default
     return json.loads(path.read_text(encoding="utf-8"))
+
 
 def validate_profile(profile: dict) -> None:
     """Validate profile configuration before writing any generated assets."""
@@ -126,19 +139,22 @@ def font_css() -> str:
             rules.append(f"@font-face{{font-family:'{family}';src:url(data:font/woff;base64,{encoded}) format('woff');font-display:swap}}")
     return "".join(rules)
 
+
 def svg_start(width: int, height: int, delay: float = 0) -> str:
     animation = "" if STATIC else f"""
       @keyframes rise{{from{{opacity:0;transform:translateY(18px)}}to{{opacity:1;transform:translateY(0)}}}}
       @keyframes reveal{{from{{opacity:0}}to{{opacity:1}}}}
       @keyframes sweep{{0%{{transform:translateX(-120%)}}100%{{transform:translateX(220%)}}}}
-      .enter{{opacity:0;animation:rise .75s cubic-bezier(.2,.8,.2,1) {delay:.2f}s both}}
-      .fade{{opacity:0;animation:reveal .7s ease {delay+.18:.2f}s both}}
+      .enter{{animation:rise .75s cubic-bezier(.2,.8,.2,1) {delay:.2f}s backwards}}
+      .fade{{animation:reveal .7s ease {delay+.08:.2f}s backwards}}
       .shine{{animation:sweep 5s ease-in-out {delay+1.5:.2f}s infinite}}
     """
     reduce = "" if STATIC else "@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;opacity:1!important;transform:none!important}animate,animateTransform,set{display:none!important}}"
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img">
     <title>NOTLXNRD profile card</title><defs>
-      <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1"><stop stop-color="{PALETTE['signal']}"/><stop offset="1" stop-color="{PALETTE['signal2']}"/></linearGradient>
+      <linearGradient id="editorial-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#151713"/><stop offset=".55" stop-color="#0f110e"/><stop offset="1" stop-color="#080907"/></linearGradient>
+      <linearGradient id="editorial-acid" x1="0" y1="0" x2="1" y2="1"><stop stop-color="{PALETTE['signal']}"/><stop offset="1" stop-color="{PALETTE['signal2']}"/></linearGradient>
+      <pattern id="editorial-grid" width="38" height="38" patternUnits="userSpaceOnUse"><path d="M38 0H0V38" fill="none" stroke="#d8e2c9" stroke-opacity=".05"/></pattern>
       <clipPath id="clip"><rect x="1" y="1" width="{width-2}" height="{height-2}" rx="18"/></clipPath>
     </defs><style>
       {font_css()}
@@ -146,44 +162,83 @@ def svg_start(width: int, height: int, delay: float = 0) -> str:
       {animation}
       {reduce}
     </style>
-    <rect x=".5" y=".5" width="{width-1}" height="{height-1}" rx="18" fill="{PALETTE['surface']}" stroke="{PALETTE['line']}"/>
+    <rect x=".5" y=".5" width="{width-1}" height="{height-1}" rx="18" fill="url(#editorial-bg)" stroke="{PALETTE['line']}"/>
     <g clip-path="url(#clip)">'''
+
 
 def svg_end() -> str:
     return "</g></svg>"
 
-def label(x: int, y: int, text: str, size: int = 11, color: str | None = None, mono: bool = True) -> str:
+
+def grid(width: int, height: int, opacity: float = 1) -> str:
+    return f'<rect width="{width}" height="{height}" fill="url(#editorial-grid)" opacity="{opacity}"/>'
+
+
+def label(x: int, y: int, text: str, size: int = 11, color: str | None = None, mono: bool = True,
+          anchor: str | None = None, spacing: float | None = None) -> str:
     cls = "mono" if mono else ""
-    return f'<text class="{cls}" x="{x}" y="{y}" font-size="{size}" fill="{color or PALETTE["muted"]}">{esc(text)}</text>'
+    attrs = f' letter-spacing="{spacing}"' if spacing is not None else ""
+    anchor_attr = f' text-anchor="{anchor}"' if anchor else ""
+    return (f'<text class="{cls}" x="{x}" y="{y}" font-size="{size}" fill="{color or PALETTE["muted"]}"'
+            f'{attrs}{anchor_attr}>{esc(text)}</text>')
+
 
 def rect(x: int, y: int, w: int, h: int, fill: str, rx: int = 8, opacity: float = 1) -> str:
     return f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{rx}" fill="{fill}" opacity="{opacity}"/>'
 
+
+def rule(x1: int, y1: int, x2: int, y2: int, color: str = PALETTE["line"], width: int = 1, opacity: float = 1) -> str:
+    return (f'<path d="M{x1} {y1}H{x2}" stroke="{color}" stroke-width="{width}"'
+            f' stroke-opacity="{opacity}" fill="none"/>')
+
+
+def wrap_text(text: str, limit: int, max_lines: int) -> list[str]:
+    """Wrap text to a character budget, trimming overflow with a visible ellipsis."""
+    words, lines, current = text.split(), [], ""
+    for word in words:
+        candidate = (current + " " + word).strip()
+        if len(candidate) > limit and current:
+            lines.append(current)
+            current = word
+        else:
+            current = candidate
+    if current:
+        lines.append(current)
+    if len(lines) > max_lines:
+        lines = lines[:max_lines]
+        lines[-1] = lines[-1].rstrip(" .") + "…"
+    return lines
+
+
 def render_hero(profile: dict) -> str:
     """Render the NOTLXNRD editorial identity banner."""
+    width, height = HERO_SIZE
     name, role = profile["name"], profile["role"]
     tagline, loc = profile["tagline"], profile["location"]
-    s = svg_start(1200, 430, 0)
-    s += '''<defs>
-      <linearGradient id="editorial-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#171916"/><stop offset=".52" stop-color="#101210"/><stop offset="1" stop-color="#080a09"/></linearGradient>
-      <linearGradient id="editorial-acid" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d5ff70"/><stop offset="1" stop-color="#8da94b"/></linearGradient>
-      <pattern id="editorial-grid" width="38" height="38" patternUnits="userSpaceOnUse"><path d="M38 0H0V38" fill="none" stroke="#d8e2c9" stroke-opacity=".07"/></pattern>
-      <filter id="editorial-blur"><feGaussianBlur stdDeviation="32"/></filter>
-    </defs>'''
-    s += '<rect width="1200" height="430" fill="url(#editorial-bg)"/><rect width="1200" height="430" fill="url(#editorial-grid)"/>'
-    s += '<ellipse cx="1000" cy="190" rx="210" ry="150" fill="#b4d66b" opacity=".12" filter="url(#editorial-blur)"/>'
-    s += '<path d="M790 0V430M830 0V430M870 0V430M910 0V430M950 0V430M990 0V430M1030 0V430M1070 0V430M1110 0V430" stroke="#d6e6b7" stroke-opacity=".09"/>'
-    s += '<path d="M770 315L930 55H1150L990 315Z" fill="none" stroke="url(#editorial-acid)" stroke-width="2" opacity=".8"/>'
-    s += '<path d="M855 315L1015 55M940 315L1100 55" stroke="#d7f19b" stroke-opacity=".28"/><path d="M930 55H1150V275" fill="none" stroke="#d9f5a4" stroke-width="5"/>'
-    s += '<circle cx="1040" cy="180" r="74" fill="none" stroke="#d9f5a4" stroke-opacity=".45"/><circle cx="1040" cy="180" r="44" fill="none" stroke="#d9f5a4" stroke-opacity=".7"/><circle cx="1040" cy="180" r="5" fill="#d9f5a4"/>'
-    s += label(58, 62, "INDEPENDENT ENGINEERING  /  " + loc.upper(), 12, "#c5e88b")
-    s += f'<text class="enter" x="48" y="202" fill="#f0f1e9" font-size="112" font-weight="800" letter-spacing="-8">{esc(name.upper() if len(name) <= 14 else name)}</text>'
-    s += '<path d="M60 230H650" stroke="#d5ff70" stroke-width="3"/>'
-    s += f'<text class="fade" x="62" y="280" fill="#e6e8df" font-size="27" font-weight="600">{esc(role)}</text>'
-    s += f'<text class="fade" x="62" y="319" fill="#aeb3a5" font-size="19">{esc(tagline)}</text>'
-    s += label(62, 385, "AI SYSTEMS  /  PRODUCT ENGINEERING  /  DIGITAL INFRASTRUCTURE", 12, "#92998a")
-    s += label(1140, 390, "BUILDING WITH INTENT", 12, "#c5e88b")
+    wordmark = str(profile.get("handle", "@notlxnrd")).lstrip("@").upper()
+    # Keep the wordmark inside the left column whatever the handle length.
+    wordmark_size = max(54, min(124, int(690 / max(len(wordmark), 1) / 0.72)))
+
+    s = svg_start(width, height, 0)
+    s += grid(width, height)
+    s += '<ellipse cx="990" cy="180" rx="220" ry="150" fill="#b4d66b" opacity=".10"/>'
+    s += '<path d="M790 0V430M830 0V430M870 0V430M910 0V430M950 0V430M990 0V430M1030 0V430M1070 0V430M1110 0V430" stroke="#d6e6b7" stroke-opacity=".08"/>'
+    s += '<path d="M770 315L930 55H1150L990 315Z" fill="none" stroke="url(#editorial-acid)" stroke-width="2" opacity=".85"/>'
+    s += '<path d="M855 315L1015 55M940 315L1100 55" stroke="#d7f19b" stroke-opacity=".26"/>'
+    s += '<path d="M930 55H1150V275" fill="none" stroke="#d9f5a4" stroke-width="5"/>'
+    s += '<circle cx="1040" cy="180" r="74" fill="none" stroke="#d9f5a4" stroke-opacity=".4"/><circle cx="1040" cy="180" r="44" fill="none" stroke="#d9f5a4" stroke-opacity=".65"/><circle cx="1040" cy="180" r="5" fill="#d9f5a4"/>'
+
+    s += label(58, 62, "INDEPENDENT ENGINEERING  /  " + loc.upper(), 12, "#c5e88b", spacing=1.6)
+    s += (f'<text class="enter" x="48" y="196" fill="#f0f1e9" font-size="{wordmark_size}" '
+           f'font-weight="800" letter-spacing="-7">{esc(wordmark)}</text>')
+    s += '<path d="M60 232H640" stroke="url(#editorial-acid)" stroke-width="3"/>'
+    s += f'<text class="fade" x="62" y="278" fill="#e6e8df" font-size="25" font-weight="600">{esc(name)}</text>'
+    s += f'<text class="fade" x="62" y="312" fill="#aeb3a5" font-size="19">{esc(role)}</text>'
+    s += f'<text class="fade" x="62" y="344" fill="#8a9282" font-size="16">{esc(tagline)}</text>'
+    s += label(62, 392, "AI SYSTEMS  /  PRODUCT ENGINEERING  /  DIGITAL INFRASTRUCTURE", 12, "#92998a", spacing=1.4)
+    s += label(1140, 392, "BUILDING WITH INTENT", 12, "#c5e88b", anchor="end", spacing=1.4)
     return s + svg_end()
+
 
 def derive_stats(data: dict) -> dict:
     days = data.get("days", [])
@@ -218,117 +273,114 @@ def derive_stats(data: dict) -> dict:
         "days": parsed,
     }
 
-def render_contributions(data: dict) -> str:
+
+def render_activity(data: dict) -> str:
+    """Render one compact, honest activity card for the public calendar."""
+    width, height = ACTIVITY_SIZE
     stats = derive_stats(data)
-    s = svg_start(960, 210, 1.0)
-    s += label(34, 35, "ACTIVITY / LAST 12 MONTHS", 11, PALETTE["signal"])
-    if not stats["days"]:
-        s += '<rect x="30" y="58" width="900" height="112" rx="12" fill="#111820" stroke="#26323c"/>'
-        s += label(54, 101, "WAITING FOR VERIFIED GITHUB ACTIVITY", 12, PALETTE["white"])
-        s += '<text x="54" y="130" font-size="13" fill="#9aa8b5">Live contribution metrics will appear after the data refresh succeeds. No numbers are fabricated.</text>'
+    s = svg_start(width, height, 0.05)
+    s += grid(width, height)
+    s += label(44, 50, "GITHUB ACTIVITY  /  LAST 12 MONTHS", 11, PALETTE["signal"], spacing=1.6)
+
+    # An empty calendar and a calendar with no public activity are both shown
+    # as a waiting state. Zero-valued metrics are never presented as results.
+    if not stats["days"] or stats["total"] == 0:
+        s += '<path d="M44 78H360" stroke="url(#editorial-acid)" stroke-width="2"/>'
+        s += (f'<text x="44" y="122" font-size="24" font-weight="650" fill="{PALETTE["white"]}">'
+              'WAITING FOR VERIFIED GITHUB ACTIVITY</text>')
+        s += (f'<text x="44" y="156" font-size="15" fill="{PALETTE["text"]}">'
+              'GitHub reports no public contributions in this window. Private activity is not exposed, '
+              'and no metrics are fabricated.</text>')
         return s + svg_end()
+
     metrics = [("CURRENT STREAK", f'{stats["current_streak"]} days'),
                ("ACTIVE DAYS", str(stats["active_days"])),
                ("BUSIEST DAY", f'{stats["busiest_date"]} · {stats["busiest_count"]}')]
     for i, (key, val) in enumerate(metrics):
-        x = 36 + i * 300
-        s += label(x, 76, key, 10)
-        s += f'<text x="{x}" y="112" font-size="27" font-weight="600" fill="{PALETTE["white"]}">{esc(val)}</text>'
+        x = 44 + i * 300
+        s += label(x, 88, key, 10, PALETTE["muted"], spacing=1.4)
+        s += f'<text x="{x}" y="126" font-size="30" font-weight="650" fill="{PALETTE["white"]}">{esc(val)}</text>'
     months = stats["months"]
     maxv = max((v for _, v in months), default=1) or 1
-    chart_x, base_y, bar_w, gap = 40, 174, 48, 22
+    chart_x, base_y, bar_w, gap = 46, 178, 56, 20
     for i, (month, value) in enumerate(months):
-        h = max(3, int(52 * value / maxv))
+        h = max(4, int(44 * value / maxv))
         x = chart_x + i * (bar_w + gap)
-        s += rect(x, base_y-h, bar_w, h, PALETTE["signal"] if value == maxv else PALETTE["raised"], 5)
-        s += label(x, 193, month.split()[0].upper(), 8, PALETTE["muted"])
+        s += rect(x, base_y - h, bar_w, h, PALETTE["signal"] if value == maxv else PALETTE["raised"], 3)
+        s += label(x, 194, month.split()[0].upper(), 9, PALETTE["faint"], spacing=1.2)
     return s + svg_end()
 
-def render_tile(title: str, subtitle: str, href: str, accent: str, delay: float) -> str:
-    # Tiles are 640x150 and are displayed at 32.5% each in README.
-    s = svg_start(640, 150, delay)
-    s += f'<path d="M0 0h640v150H0z" fill="{PALETTE["surface"]}"/>'
-    s += f'<rect x="1" y="1" width="638" height="148" rx="17" fill="none" stroke="{PALETTE["line"]}"/>'
-    s += f'<circle cx="570" cy="38" r="18" fill="{accent}" opacity=".14"/>'
-    s += f'<path d="M562 38h16m-7-7 7 7-7 7" fill="none" stroke="{accent}" stroke-width="1.5"/>'
-    s += f'<text class="enter" x="28" y="63" font-size="25" font-weight="650" fill="{PALETTE["white"]}">{esc(title)}</text>'
-    s += f'<text x="29" y="91" font-size="13" fill="{PALETTE["muted"]}">{esc(subtitle)}</text>'
-    s += label(29, 124, "OPEN DESTINATION  ↗", 9, accent)
-    return s + svg_end()
-
-def render_repo(repo: dict, delay: float) -> str:
-    """Render a project as a compact editorial case-study panel."""
-    s = svg_start(960, 198, delay)
-    s += '<rect x="1" y="1" width="958" height="196" rx="18" fill="#0b1016" stroke="#26323c"/>'
-    s += '<path d="M1 18Q1 1 18 1H942Q959 1 959 18" fill="none" stroke="url(#accent)" stroke-width="2" opacity=".8"/>'
-    s += label(30, 38, repo.get("status", "SELECTED WORK").upper(), 10, PALETTE["signal"])
-    s += f'<text class="enter" x="30" y="88" font-size="29" font-weight="650" letter-spacing="-.8" fill="{PALETTE["white"]}">{esc(repo["name"])}</text>'
-    desc = repo["description"]
-    words, lines, current = desc.split(), [], ""
-    for word in words:
-        candidate = (current + " " + word).strip()
-        if len(candidate) > 94 and current:
-            lines.append(current)
-            current = word
-        else:
-            current = candidate
-    if current:
-        lines.append(current)
-    if len(lines) > 2:
-        lines = lines[:2]
-        lines[-1] = lines[-1].rstrip(" .") + "…"
-    for index, line in enumerate(lines[:2]):
-        s += f'<text x="30" y="{122 + index*22}" font-size="13" fill="{PALETTE["text"]}">{esc(line)}</text>'
-    s += label(30, 177, "OPEN PROJECT  ↗", 9, PALETTE["signal"])
-    s += '<circle cx="891" cy="91" r="34" fill="#2bb0cf" opacity=".07"/><path d="M875 91h31m-9-9 9 9-9 9" stroke="#55c6dc" fill="none" stroke-width="1.7"/>'
-    return s + svg_end()
 
 def render_stack(groups: list[dict]) -> str:
-    """Render a compact, grouped capability map without badge-wall noise."""
-    s = svg_start(960, 300, 2.0)
-    s += label(30, 34, "ENGINEERING TOOLKIT  /  SELECTED PRACTICE", 10, PALETTE["signal"])
+    """Render a grouped capability map with legible, full-size type."""
+    width, height = STACK_SIZE
+    s = svg_start(width, height, 0.10)
+    s += grid(width, height)
+    s += label(44, 50, "ENGINEERING TOOLKIT  /  SELECTED PRACTICE", 11, PALETTE["signal"], spacing=1.6)
     columns = 3
-    col_w, top = 292, 66
+    col_w, gap, top = 288, 12, 84
     for index, group in enumerate(groups[:columns]):
-        x = 30 + index * 316
-        s += f'<rect x="{x}" y="{top}" width="{col_w}" height="198" rx="14" fill="#0b1016" stroke="#26323c"/>'
-        s += label(x+18, top+32, f'{index+1:02d}  /  {group["title"]}', 10, PALETTE["signal"])
-        s += f'<path d="M{x+18} {top+48}H{x+col_w-18}" stroke="#26323c"/>'
+        x = 44 + index * (col_w + gap)
+        s += label(x, top, f'{index+1:02d}', 12, PALETTE["signal"], spacing=1.6)
+        s += f'<text x="{x + 34}" y="{top}" font-size="17" font-weight="650" fill="{PALETTE["white"]}">{esc(group["title"])}</text>'
+        s += rule(x, top + 18, x + col_w, top + 18, PALETTE["line2"])
         for row, item in enumerate(group.get("items", [])[:6]):
-            y = top + 78 + row*23
-            s += f'<circle cx="{x+22}" cy="{y-4}" r="3" fill="#45bad2"/>'
-            s += f'<text x="{x+34}" y="{y}" font-size="13" fill="{PALETTE["text"]}">{esc(item)}</text>'
+            y = top + 52 + row * 30
+            s += f'<path d="M{x} {y - 5}h12" stroke="{PALETTE["signal"]}" stroke-width="2" stroke-opacity=".8"/>'
+            s += f'<text x="{x + 26}" y="{y}" font-size="16" fill="{PALETTE["text"]}">{esc(item)}</text>'
     return s + svg_end()
 
 
-def render_graph(data: dict) -> str:
-    days = derive_stats(data)["days"]
-    s = svg_start(960, 176, 6.0)
-    s += label(30, 34, "CONTRIBUTION MAP  /  GITHUB", 10, PALETTE["signal"])
-    if not days:
-        s += f'<text x="30" y="91" font-size="16" fill="{PALETTE["text"]}">Contribution data will appear after the first successful refresh.</text>'
-        return s + svg_end()
-    lookup = {d: c for d, c in days}
-    start = days[0][0]
-    start -= timedelta(days=(start.weekday() + 1) % 7)
-    maxv = max(lookup.values(), default=1) or 1
-    for idx in range(371):
-        day = start + timedelta(days=idx)
-        if day > date.today():
-            break
-        count = lookup.get(day, 0)
-        level = 0 if count == 0 else min(4, 1 + int(3 * count / maxv))
-        fills = [PALETTE["raised"], "#12313a", "#155366", "#1b7d98", PALETTE["signal"]]
-        col, row = idx // 7, idx % 7
-        x, y = 30 + col * 17, 55 + row * 15
-        s += f'<rect x="{x}" y="{y}" width="11" height="10" rx="2" fill="{fills[level]}"><title>{day.isoformat()}: {count} contributions</title></rect>'
-    s += label(30, 166, f'{derive_stats(data)["total"]:,} contributions · {len(days)} days tracked', 9)
+def render_repo(repo: dict, delay: float, index: int = 1) -> str:
+    """Render a project as an editorial case-study row."""
+    width, height = REPO_SIZE
+    s = svg_start(width, height, delay)
+    s += grid(width, height)
+    s += label(44, 52, repo.get("status", "SELECTED WORK").upper(), 11, PALETTE["signal"], spacing=1.6)
+    s += (f'<text class="enter" x="44" y="110" font-size="38" font-weight="700" letter-spacing="-.8" '
+           f'fill="{PALETTE["white"]}">{esc(repo["name"])}</text>')
+    for row, line in enumerate(wrap_text(repo["description"], 92, 2)):
+        s += f'<text x="44" y="{148 + row * 26}" font-size="17" fill="{PALETTE["text"]}">{esc(line)}</text>'
+    s += (f'<text x="{width - 44}" y="156" font-size="86" font-weight="800" letter-spacing="-5" '
+           f'fill="{PALETTE["signal"]}" opacity=".09" text-anchor="end">{index:02d}</text>')
+    s += rule(44, 208, width - 44, 208, PALETTE["line"])
+    s += label(44, 230, f'{index:02d}  /  SELECTED WORK', 10, PALETTE["faint"], spacing=1.4)
+    s += label(width - 44, 230, "OPEN PROJECT  ↗", 10, PALETTE["signal"], anchor="end", spacing=1.4)
     return s + svg_end()
+
+
+def render_cta(tiles: list[dict]) -> str:
+    """Render the closing call-to-action band with the configured destinations."""
+    width, height = CTA_SIZE
+    s = svg_start(width, height, 0.15)
+    s += grid(width, height)
+    s += label(44, 52, "HAVE A GOOD PROBLEM?", 11, PALETTE["signal"], spacing=1.6)
+    s += (f'<text x="44" y="106" font-size="30" font-weight="650" fill="{PALETTE["white"]}">'
+          'Let’s build something useful.</text>')
+    for i, tile in enumerate(tiles[:2]):
+        x = 520 + i * 200
+        host = urlparse(tile["href"]).netloc.replace("www.", "")
+        s += rule(x, 74, x + 172, 74, PALETTE["line2"])
+        s += f'<text x="{x}" y="104" font-size="18" font-weight="650" fill="{PALETTE["white"]}">{esc(tile["title"])}</text>'
+        s += f'<text x="{x}" y="128" font-size="12" fill="{PALETTE["muted"]}">{esc(host)}</text>'
+        s += label(x, 150, "OPEN  ↗", 10, PALETTE["signal"], spacing=1.4)
+    return s + svg_end()
+
 
 def write_card(path: Path, content: str) -> None:
     """Write deterministic UTF-8/LF output without trailing whitespace."""
     normalized = "\n".join(line.rstrip() for line in content.splitlines()) + "\n"
     path.write_text(normalized, encoding="utf-8", newline="\n")
+
+
+def prune_cards(expected: set[Path]) -> list[Path]:
+    """Remove SVGs the renderer no longer produces so the manifest stays exact."""
+    pruned = []
+    for path in sorted(CARDS.rglob("*.svg")):
+        if path not in expected:
+            path.unlink()
+            pruned.append(path)
+    return pruned
 
 
 def main() -> None:
@@ -339,21 +391,24 @@ def main() -> None:
     validate_profile(profile)
     CARDS.mkdir(parents=True, exist_ok=True)
     write_card(CARDS / "hero.svg", render_hero(profile))
-    write_card(CARDS / "contributions.svg", render_contributions(contributions))
-    write_card(CARDS / "contribution-graph.svg", render_graph(contributions))
+    write_card(CARDS / "activity.svg", render_activity(contributions))
     write_card(CARDS / "stack.svg", render_stack(profile.get("stack_groups", [])))
-    for i, tile in enumerate(profile["tiles"]):
-        target = CARDS / "links" / f'{tile["id"]}.svg'
-        target.parent.mkdir(parents=True, exist_ok=True)
-        write_card(target, render_tile(tile["title"], tile["subtitle"], tile["href"], tile["accent"], 1.8+i*.35))
+    write_card(CARDS / "cta.svg", render_cta(profile.get("tiles", [])))
     for i, repo in enumerate(profile["featured_repos"]):
         target = CARDS / "repos" / f'{repo["id"]}.svg'
         target.parent.mkdir(parents=True, exist_ok=True)
-        write_card(target, render_repo(repo, 3.2+i*.45))
+        write_card(target, render_repo(repo, 0.20 + i * 0.06, i + 1))
     # Fail closed: every generated SVG must be parseable XML.
     for path in CARDS.rglob("*.svg"):
         ET.parse(path)
+    pruned = prune_cards({
+        CARDS / "hero.svg", CARDS / "activity.svg", CARDS / "stack.svg", CARDS / "cta.svg",
+        *(CARDS / "repos" / f'{repo["id"]}.svg' for repo in profile["featured_repos"]),
+    })
+    for path in pruned:
+        print(f"Pruned stale asset: {path.relative_to(ROOT).as_posix()}")
     print(f"Rendered {len(list(CARDS.rglob('*.svg')))} SVG cards ({'static' if STATIC else 'animated'}).")
+
 
 if __name__ == "__main__":
     main()

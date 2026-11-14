@@ -117,10 +117,30 @@ def test_stack_card_is_well_formed():
 
 
 def test_empty_contributions_are_not_rendered_as_zero_metrics():
-    svg = renderer.render_contributions({"days": []})
+    svg = renderer.render_activity({"days": []})
     ET.fromstring(svg)
     assert "WAITING FOR VERIFIED GITHUB ACTIVITY" in svg
     assert "CURRENT STREAK" not in svg
+
+
+def test_zero_contributions_are_not_rendered_as_zero_metrics():
+    days = [{"date": f"2026-11-{day:02d}", "count": 0, "level": 0} for day in range(1, 11)]
+    svg = renderer.render_activity({"days": days})
+    ET.fromstring(svg)
+    assert "WAITING FOR VERIFIED GITHUB ACTIVITY" in svg
+    assert "CURRENT STREAK" not in svg
+
+
+def test_activity_card_reports_real_metrics_when_contributions_exist():
+    days = [
+        {"date": "2026-11-09", "count": 4, "level": 2},
+        {"date": "2026-11-10", "count": 2, "level": 1},
+    ]
+    svg = renderer.render_activity({"days": days})
+    ET.fromstring(svg)
+    assert "CURRENT STREAK" in svg
+    assert "ACTIVE DAYS" in svg
+    assert "2026-11-09" in svg
 
 
 def test_readme_image_references_exist():
@@ -227,8 +247,7 @@ def test_every_generated_asset_is_well_formed_and_matches_manifest(tmp_path, mon
     renderer.main()
     actual = {path.relative_to(tmp_path).as_posix() for path in (tmp_path / "cards").rglob("*.svg")}
     expected = {
-        "cards/hero.svg", "cards/contributions.svg", "cards/contribution-graph.svg",
-        "cards/stack.svg", "cards/links/build.svg", "cards/links/systems.svg",
+        "cards/hero.svg", "cards/activity.svg", "cards/stack.svg", "cards/cta.svg",
         "cards/repos/nancy.svg", "cards/repos/notlxnrd-os.svg",
         "cards/repos/roxan.svg", "cards/repos/trade-titans.svg",
     }
@@ -260,3 +279,36 @@ def test_editorial_hero_uses_the_new_visual_identity():
     assert "editorial-acid" in svg
     assert "INDEPENDENT ENGINEERING" in svg
     assert "2bb0cf" not in svg
+
+
+def test_generated_cards_are_drawn_at_their_display_width():
+    assert renderer.HERO_SIZE == (1200, 430)
+    assert renderer.REPO_SIZE == (960, 240)
+    assert renderer.STACK_SIZE == (960, 300)
+    assert renderer.ACTIVITY_SIZE == (960, 200)
+    assert renderer.CTA_SIZE == (960, 170)
+    svg = renderer.render_repo({
+        "id": "sample", "name": "Sample", "description": "Short.", "status": "ACTIVE",
+    }, 0, 1)
+    assert 'width="960"' in svg
+    assert 'font-size="17"' in svg
+
+
+def test_cta_card_lists_configured_destinations():
+    tiles = [
+        {"id": "build", "title": "BUILD", "subtitle": "Software", "href": "https://leonardlomude.vercel.app", "accent": "#d5ff70"},
+        {"id": "systems", "title": "SYSTEMS", "subtitle": "Architecture", "href": "https://github.com/isthatleo", "accent": "#5b7cdf"},
+    ]
+    svg = renderer.render_cta(tiles)
+    ET.fromstring(svg)
+    assert "BUILD" in svg
+    assert "SYSTEMS" in svg
+    assert "leonardlomude.vercel.app" in svg
+    assert "github.com" in svg
+
+
+def test_every_generated_card_is_referenced_by_the_readme():
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    for path in (ROOT / "cards").rglob("*.svg"):
+        reference = path.relative_to(ROOT).as_posix()
+        assert reference in readme, reference
