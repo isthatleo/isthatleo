@@ -3,33 +3,34 @@
 </div>
 
 <div align="center">
-  <a href="https://leonardlomude.vercel.app">PORTFOLIO</a> &nbsp;/&nbsp;
-  <a href="https://github.com/isthatleo?tab=repositories">CODE</a> &nbsp;/&nbsp;
-  <a href="https://github.com/isthatleo/automatic-octo-spork/tree/main/nancy-billion">CURRENT SYSTEM</a>
+  <a href="https://leonardlomude.vercel.app">PORTFOLIO</a> &nbsp;·&nbsp;
+  <a href="https://github.com/isthatleo?tab=repositories">GITHUB</a> &nbsp;·&nbsp;
+  <a href="https://github.com/isthatleo/automatic-octo-spork/tree/main/nancy-billion">NÅNCY / BILLION</a>
 </div>
 
----
+<div align="center">
+  <img src="./cards/contribution-graph.svg" width="100%" alt="Animated GitHub contribution calendar for the last year" />
+</div>
 
-## THE PRACTICE
+<div align="center">
+  <img src="./cards/activity.svg" width="100%" alt="Monthly GitHub contributions, current streak, active days and busiest day" />
+</div>
 
-I’m Leonard Lomude — an independent software engineer working at the intersection of **AI systems, product engineering and business software**.
+<div align="center">
+  <a href="https://leonardlomude.vercel.app"><img src="./cards/tiles/build.svg" width="32.5%" alt="Build — software, products and engineering" /></a>
+  <a href="https://github.com/isthatleo?tab=repositories"><img src="./cards/tiles/systems.svg" width="32.5%" alt="Systems — architecture, open source and code" /></a>
+  <a href="https://github.com/isthatleo/automatic-octo-spork/tree/main/nancy-billion"><img src="./cards/tiles/ai-lab.svg" width="32.5%" alt="AI Lab — agents, memory and multimodal systems" /></a>
+</div>
 
-I build the whole chain: the problem, the architecture, the interface, the data, the deployment, and what happens when real people use the thing.
+## WHAT I'M BUILDING
 
-Based in Kampala, Uganda. Working globally.
+I'm Leonard Lomude — an independent software engineer working across **AI systems, product engineering and business software**.
 
-**CURRENT FIXATION — making complex systems feel simple:**
+I care about the full chain: understanding the problem, shaping the architecture, building the interface, engineering the data layer and making the product reliable in the real world.
 
-- Private-first AI and agent infrastructure
-- Software products with deliberate interaction design
-- Reliable platforms for real operational work
-- Tools that turn data into better decisions
-
----
+Based in Kampala, Uganda. Building for a wider world.
 
 ## SELECTED WORK
-
-*Four problem spaces. Four ongoing attempts to make something useful.*
 
 <a href="https://github.com/isthatleo/automatic-octo-spork/tree/main/nancy-billion"><img src="./cards/repos/nancy.svg" width="100%" alt="NÅNCY / BILLION — private-first AI assistant platform" /></a>
 
@@ -41,27 +42,4 @@ Based in Kampala, Uganda. Working globally.
 
 ---
 
-## THE TOOLKIT
-
-<img src="./cards/stack.svg" width="100%" alt="Selected engineering technologies and practices, grouped by discipline" />
-
----
-
-## ACTIVITY
-
-<img src="./cards/activity.svg" width="100%" alt="GitHub activity summary, populated from verified public contribution data" />
-
----
-
-## PRINCIPLES
-
-- **Clarity over cleverness** — the best architecture is one a team can reason about.
-- **Useful over impressive** — a product earns its complexity by solving a real problem.
-- **Evidence over theatre** — test what ships, measure what matters, say what is unfinished.
-- **Design is engineering** — the interface is part of the system, not decoration added later.
-
----
-
-<div align="center">
-  <img src="./cards/cta.svg" width="100%" alt="Open to thoughtful collaborations, difficult engineering problems and products with a reason to exist" />
-</div>
+<sub>Software engineering · AI infrastructure · Product design · Kampala, Uganda</sub>
