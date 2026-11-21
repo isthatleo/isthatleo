@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Generate the NOTLXNRD GitHub profile using the animated SVG-card approach.
 
+CI runs this renderer after profile source or test changes.
+
 The composition follows Avi Vashishta's public animated-card concept while
 using an original NOTLXNRD identity, project data, and contribution palette.
 All SVGs are self-contained and safe to embed through GitHub README image tags.
