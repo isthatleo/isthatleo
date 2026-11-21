@@ -11,60 +11,46 @@
       "name": "NÅNCY / BILLION",
       "description": "A private-first AI assistant platform for orchestration, tools, memory and multimodal workflows.",
       "status": "AI SYSTEMS · ACTIVE DEVELOPMENT",
-      "url": "https://github.com/isthatleo/automatic-octo-spork/tree/main/nancy-billion"
+      "url": "https://github.com/isthatleo/automatic-octo-spork/tree/main/nancy-billion",
+      "accent": "#3478f6"
     },
     {
       "id": "notlxnrd-os",
       "name": "NOTLXNRD.OS",
       "description": "A premium personal software platform with a public experience, private command center, client portal and AI layer.",
       "status": "PRODUCT ENGINEERING · ACTIVE DEVELOPMENT",
-      "url": "https://github.com/isthatleo/notlxnrd"
+      "url": "https://github.com/isthatleo/notlxnrd",
+      "accent": "#e36c62"
     },
     {
       "id": "roxan",
       "name": "ROXAN",
       "description": "Education operations software for connected school administration, institutional workflows and reporting.",
       "status": "EDUCATION TECHNOLOGY · PRODUCT DEVELOPMENT",
-      "url": "https://leonardlomude.vercel.app"
+      "url": "https://leonardlomude.vercel.app",
+      "accent": "#e8b84b"
     },
     {
       "id": "trade-titans",
       "name": "TRADE TITANS",
       "description": "Trading education and operations tooling built around structured workflows, analytics and execution discipline.",
       "status": "TRADING TECHNOLOGY · SELECTED WORK",
-      "url": "https://leonardlomude.vercel.app"
+      "url": "https://leonardlomude.vercel.app",
+      "accent": "#3478f6"
     }
   ],
   "stack_groups": [
     {
       "title": "PRODUCT INTERFACES",
-      "items": [
-        "TypeScript",
-        "JavaScript",
-        "React",
-        "Next.js",
-        "HTML / CSS"
-      ]
+      "items": ["TypeScript", "JavaScript", "React", "Next.js", "HTML / CSS"]
     },
     {
       "title": "SYSTEMS & BACKEND",
-      "items": [
-        "Rust",
-        "Python",
-        "FastAPI",
-        "Node.js",
-        "PostgreSQL"
-      ]
+      "items": ["Rust", "Python", "FastAPI", "Node.js", "PostgreSQL"]
     },
     {
       "title": "ENGINEERING PRACTICE",
-      "items": [
-        "API design",
-        "System architecture",
-        "Testing",
-        "Docker",
-        "Git / CI"
-      ]
+      "items": ["API design", "System architecture", "Testing", "Docker", "Git / CI"]
     }
   ],
   "tiles": [
@@ -73,14 +59,21 @@
       "title": "BUILD",
       "subtitle": "Software · Products · Engineering",
       "href": "https://leonardlomude.vercel.app",
-      "accent": "#2bb0cf"
+      "accent": "#3478f6"
     },
     {
       "id": "systems",
       "title": "SYSTEMS",
-      "subtitle": "Architecture · AI · Infrastructure",
-      "href": "https://github.com/isthatleo",
-      "accent": "#5b7cdf"
+      "subtitle": "Architecture · Open source · Code",
+      "href": "https://github.com/isthatleo?tab=repositories",
+      "accent": "#e36c62"
+    },
+    {
+      "id": "ai-lab",
+      "title": "AI LAB",
+      "subtitle": "Agents · Memory · Multimodal systems",
+      "href": "https://github.com/isthatleo/automatic-octo-spork/tree/main/nancy-billion",
+      "accent": "#e8b84b"
     }
   ]
 }
